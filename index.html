@@ -1,0 +1,1734 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TaskFlow — To Do × Calendar (v70)</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#687386;--line:#e4e8f0;--blue:#3869c8;--blue-soft:#e8efff;--green:#238454;--red:#b94a48;--shadow:0 8px 24px rgba(25,42,70,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 13px;background:var(--blue);color:white;font-weight:650}button.secondary{background:#eef1f7;color:#29364c}button.ghost{background:transparent;color:var(--muted);padding:7px}button.danger{background:#fff0ef;color:var(--red)}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:white;color:var(--ink)}label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}.app{max-width:1100px;margin:auto;padding:20px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:13px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:22px;font-weight:800}.brand h1{font-size:20px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}.nav{display:flex;gap:6px;background:#e9edf5;border-radius:12px;padding:4px}.nav button{background:transparent;color:var(--muted);padding:9px 13px}.nav button.active{background:white;color:var(--ink);box-shadow:0 2px 6px #17203312}.layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:16px}.panel{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:17px;box-shadow:var(--shadow);min-width:0}.panel h2{font-size:17px;margin:0}.panelhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.sub{font-size:12px;color:var(--muted)}.filters{display:flex;gap:5px;flex-wrap:wrap;margin:12px 0}.filters button{font-size:12px;padding:7px 10px}.filters button.active{background:var(--blue);color:white}.task-list{display:grid;gap:8px}.task-section{margin-top:15px}.task-section-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px;font-size:13px;font-weight:750}.section-count{font-size:11px;color:var(--muted);font-weight:500}.section-drop{min-height:28px;border-radius:10px;transition:background .12s}.section-drop.over{background:#eef3ff;outline:1px dashed var(--blue);outline-offset:2px}.section-empty{font-size:12px;color:var(--muted);padding:12px;border:1px dashed var(--line);border-radius:10px;text-align:center}.task{position:relative;border:1px solid var(--line);border-radius:12px;padding:11px;display:flex;align-items:flex-start;gap:9px;background:white;cursor:grab}.task:active{cursor:grabbing}.task.done{opacity:.58}.task.done .task-title{text-decoration:line-through}.check{margin-top:2px;accent-color:var(--blue);width:17px;height:17px;flex-shrink:0}.task-main{min-width:0;flex:1}.task-title{font-weight:650;overflow-wrap:anywhere}.meta{font-size:12px;color:var(--muted);margin-top:4px}.tag{display:inline-block;border-radius:6px;background:#f0f3f8;color:#526077;padding:3px 6px;font-size:10px;margin-top:5px}.tag.high{background:#fff0ef;color:#ad4945}.tag.scheduled{background:#e7f6ed;color:#24764a}.task-actions{display:flex;gap:2px}.iconbtn{background:transparent;color:#7b8798;padding:3px;font-size:15px}.addform{border-top:1px solid var(--line);margin-top:14px;padding-top:13px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 9px}.full{grid-column:1/-1}.weekbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.weekbar .date-nav{display:flex;align-items:center;gap:7px}.date-nav button{padding:7px 10px}.week-title{font-weight:700}.calendar{display:grid;grid-template-columns:52px repeat(7,minmax(68px,1fr));border:1px solid var(--line);border-radius:12px;overflow:auto;min-width:0}.calhead{background:#f8f9fc;border-bottom:1px solid var(--line);padding:9px 3px;text-align:center;font-size:12px;color:var(--muted);min-width:0}.calhead.today{color:var(--blue);font-weight:800;background:var(--blue-soft)}.time-label{height:62px;padding:5px 4px;font-size:10px;color:var(--muted);border-bottom:1px solid var(--line);text-align:right}.slot{height:62px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);padding:3px;min-width:0;position:relative;transition:background .12s}.slot:hover,.slot.over{background:#eef3ff}.event{position:absolute;left:3px;right:3px;top:3px;z-index:2;border-radius:7px;padding:5px 5px;height:56px;min-height:18px;font-size:10px;overflow:hidden;cursor:grab;border-left:3px solid #3869c8;background:#e8efff;color:#234d9a;box-shadow:0 1px 3px #17203312;transition:opacity .18s,filter .18s}.event strong{display:block;font-size:10px;line-height:1.25;overflow-wrap:anywhere}.event span{display:block;margin-top:3px;opacity:.85}.event.done{background:#e8f4ec;color:#2b6e46;border-color:#39915c}.calendar.month-mode{grid-template-columns:repeat(7,minmax(0,1fr));overflow:visible}.month-cell{position:relative;min-height:105px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);padding:5px;min-width:0}.month-cell.muted{background:#fafbfc;color:#a5adba}.month-cell.over,.month-cell:hover{background:#eef3ff}.month-num{font-size:12px;font-weight:700;margin-bottom:4px}.month-event{display:block;width:100%;text-align:left;border-radius:5px;padding:4px 5px;margin:3px 0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#e8efff;color:#234d9a;border-left:3px solid #3869c8}.month-event.done{text-decoration:line-through;opacity:.65}.task.bursting,.event.bursting,.month-event.bursting{pointer-events:none;animation:taskBurst .62s cubic-bezier(.2,.75,.35,1) forwards;transform-origin:center}@keyframes taskBurst{0%{opacity:1;transform:scale(1) rotate(0);filter:brightness(1)}35%{opacity:1;transform:scale(1.08) rotate(-2deg);filter:brightness(1.8)}100%{opacity:0;transform:scale(.15) rotate(14deg);filter:brightness(2)}}.burst-particle{position:absolute;z-index:8;width:6px;height:6px;border-radius:50%;pointer-events:none;background:var(--particle-color,#3869c8);left:50%;top:50%;animation:particleBurst .62s ease-out forwards}@keyframes particleBurst{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.2)}}@media(prefers-reduced-motion:reduce){.task.bursting,.event.bursting,.month-event.bursting,.burst-particle{animation-duration:.01ms!important}}.color-row{display:flex;align-items:center;gap:8px}.color-row input[type=color]{width:46px;height:38px;padding:3px;cursor:pointer}.notification-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.emptyhint{color:var(--muted);font-size:12px;text-align:center;padding:22px 5px}.todaybar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.stat{background:#f8f9fc;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:12px;color:var(--muted)}.stat b{color:var(--ink);font-size:16px;margin-right:4px}.notice{border-radius:10px;background:#fff6e8;color:#8d5c17;padding:9px 11px;font-size:12px;margin:10px 0;display:none}.notice.show{display:block}.modalback{position:fixed;inset:0;background:#10182866;display:none;align-items:center;justify-content:center;padding:16px;z-index:5}.modalback.show{display:flex}.modal{background:white;border-radius:17px;padding:20px;width:min(480px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 70px #0002}.modal h2{margin:0 0 8px;font-size:19px}.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:17px}.reward-back{position:fixed;inset:0;background:rgba(17,27,47,.68);display:none;align-items:center;justify-content:center;padding:18px;z-index:20;backdrop-filter:blur(5px)}.reward-back.show{display:flex;animation:rewardFade .22s ease-out}.reward-card{position:relative;overflow:hidden;width:min(430px,100%);padding:26px 22px 22px;text-align:center;border-radius:24px;background:linear-gradient(160deg,#fffdf5,#fff 52%,#f3f7ff);box-shadow:0 24px 90px #0004;border:1px solid #fff}.reward-card:before,.reward-card:after{content:"✦";position:absolute;color:#f3c65d;font-size:30px;animation:twinkle 1.5s ease-in-out infinite alternate}.reward-card:before{top:16px;left:20px}.reward-card:after{right:22px;top:42px;font-size:21px;animation-delay:.4s}.reward-kicker{font-size:11px;letter-spacing:.18em;color:#9b7620;font-weight:800}.reward-stamp{width:112px;height:112px;margin:18px auto 14px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 28%,#fff8d9,#ffd976 55%,#e8a93d);border:5px double #fff5cf;box-shadow:0 8px 0 #d99b3c,0 12px 25px #e6b54b55;color:#80551a;font-size:47px;animation:stampIn .55s cubic-bezier(.2,1.5,.45,1) both}.reward-title{font-size:25px;font-weight:850;letter-spacing:.02em;margin:8px 0}.reward-task{font-weight:750;font-size:16px;overflow-wrap:anywhere;margin:9px auto 5px}.reward-message{color:#687386;font-size:13px;line-height:1.7;margin:8px auto 17px}.stamp-board{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:17px 0 20px;padding:12px;border-radius:15px;background:#f5f2e9;border:1px solid #e8dfc9}.stamp-cell{aspect-ratio:1;border-radius:10px;border:1px dashed #d6c8a8;display:grid;place-items:center;color:#c8b995;font-size:19px;background:#fffcf4}.stamp-cell.filled{border:1px solid #f0cf75;background:#fff2bf;color:#a8731c;box-shadow:inset 0 0 0 2px #fff9df}.stamp-cell.new-stamp{animation:stampIn .55s cubic-bezier(.2,1.5,.45,1) both}.reward-count{font-size:12px;color:#8b784d}.reward-button{width:100%;background:#3869c8;box-shadow:0 4px 0 #254b9b}.reward-spark{position:absolute;color:#f0be45;pointer-events:none;animation:rewardSpark 1s ease-out forwards}@keyframes rewardFade{from{opacity:0}to{opacity:1}}@keyframes stampIn{0%{opacity:0;transform:scale(2.2) rotate(-18deg)}70%{opacity:1;transform:scale(.88) rotate(5deg)}100%{opacity:1;transform:scale(1) rotate(0)}}@keyframes twinkle{from{transform:scale(.7) rotate(-10deg);opacity:.45}to{transform:scale(1.1) rotate(12deg);opacity:1}}@keyframes rewardSpark{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(.2)}}@media(prefers-reduced-motion:reduce){.reward-back.show,.reward-stamp,.stamp-cell.new-stamp,.reward-card:before,.reward-card:after,.reward-spark{animation-duration:.01ms!important}}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#172033;color:white;padding:10px 15px;border-radius:10px;display:none;z-index:9;font-size:13px;max-width:90vw}.toast.show{display:block}.mobile-hint{display:none}.bottomnav{display:none}
+@media(max-width:760px){.app{padding:12px 10px 82px}.top{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.panel{padding:14px}.calendar-wrap{overflow-x:auto}.calendar{min-width:680px}.task-list{grid-template-columns:1fr}.desktop-label{display:none}.mobile-hint{display:block}.bottomnav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:8px 10px;justify-content:space-around;z-index:3}.bottomnav button{background:transparent;color:var(--muted);font-size:12px;padding:7px}.bottomnav button.active{color:var(--blue)}.bottomnav{display:flex;gap:10px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))}.bottomnav button{flex:1;min-width:0;border-radius:14px;min-height:48px;font-size:13px;font-weight:700;white-space:nowrap}.bottomnav .bottomnav-add{flex:1;background:#3869c8;color:#fff;box-shadow:0 3px 8px rgba(56,105,200,.2)}.bottomnav .bottomnav-list{background:#eef2f8;color:#25324a;border:1px solid #dce3ee}.bottomnav .bottomnav-list.active{background:#e5edff;color:#2456b8;border-color:#b9cdfb}.bottomnav .bottomnav-add:active{transform:translateY(1px);filter:brightness(.96)}}
+
+.achievement-panel{max-width:980px;width:100%;margin:0 auto}
+
+.records-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.records-column{min-width:0;margin-top:0}
+.records-column .achievement-section-head{align-items:flex-start;flex-wrap:wrap}
+.records-column .badge-grid{grid-template-columns:1fr;max-height:560px;overflow-y:auto;overscroll-behavior:contain;padding:0 6px 0 0;scrollbar-gutter:stable}
+.records-column .badge-card{min-width:0;overflow:hidden}.records-column .badge-card .badge-icon{display:inline-flex;align-items:center;justify-content:center;max-width:100%;line-height:1;white-space:nowrap;overflow:hidden;flex-shrink:0}
+.records-column .achievement-history{max-height:560px;overflow-y:auto}
+@media(max-width:720px){.records-columns{grid-template-columns:1fr}.records-column .badge-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));max-height:440px;overflow-y:auto;overscroll-behavior:contain;padding:0 6px 0 0;scrollbar-gutter:stable}.records-column .achievement-history{max-height:none}}
+.achievement-menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0 18px}
+.achievement-menu-card{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;min-height:132px;padding:15px;background:#fbfcff;color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:none;transition:border-color .15s,background .15s,transform .15s}
+.achievement-menu-card:hover{transform:translateY(-2px);border-color:#b8c9f0}
+.achievement-menu-card.active{background:#edf3ff;border-color:#8ca9e8;box-shadow:inset 0 0 0 1px #8ca9e8}
+.achievement-menu-icon{font-size:26px;line-height:1.2}.achievement-menu-title{font-size:14px;font-weight:800}.achievement-menu-desc{font-size:11px;line-height:1.5;color:var(--muted);font-weight:500}
+.achievement-page{animation:achievementPageIn .18s ease-out}@keyframes achievementPageIn{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.progress-period-switch{display:flex;gap:8px;margin:12px 0 16px}
+.progress-period-switch button{min-width:100px}
+.progress-period-switch button.active{background:#eaf0ff;border-color:#9bb4ed;color:#234f9e;font-weight:800}
+
+.period-task-score{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.period-task-current,.period-task-best{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fbfcff}
+.period-task-current>div,.period-task-best>div{display:flex;align-items:baseline;gap:5px;margin-top:6px}
+.period-task-current strong{font-size:34px;letter-spacing:-1px}
+.period-task-best strong{font-size:28px;letter-spacing:-.5px}
+.period-task-current>div span,.period-task-best>div span{font-size:13px;font-weight:700}
+.period-task-best{background:#f6f8fc}
+.period-task-best small{font-size:10px;color:var(--muted)}
+.progress-evaluation{display:flex;align-items:flex-start;gap:14px;border:1px solid var(--line);border-radius:15px;padding:17px;background:#fbfcff}
+.evaluation-icon{width:48px;height:48px;border-radius:14px;background:#edf2ff;display:grid;place-items:center;font-size:25px;flex-shrink:0}
+.progress-evaluation strong{font-size:16px}.progress-evaluation p{margin:5px 0 0;font-size:13px;line-height:1.65;color:var(--muted)}
+.deadline-chart{display:block;min-height:0;padding:0;overflow-x:auto;overflow-y:hidden;border:0}
+.deadline-plot-svg{display:block;width:100%;height:auto;min-width:560px}
+.deadline-plot-svg text{font-family:inherit;fill:var(--muted);font-size:11px}
+.deadline-plot-svg .plot-grid{stroke:#d9dce3;stroke-width:1}
+.deadline-plot-svg .plot-grid.major{stroke:#aeb4c0;stroke-width:1.15}
+.deadline-plot-svg .plot-axis{stroke:#626b78;stroke-width:1.4}
+.deadline-plot-svg .plot-line{fill:none;stroke:#3f6fc5;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.deadline-plot-svg .plot-point{fill:#3f6fc5;stroke:#fff;stroke-width:1.4}
+.deadline-plot-svg .plot-point:hover{r:5}
+.deadline-plot-svg .plot-point.today{fill:#d97732;stroke:#fff;stroke-width:2}
+.deadline-plot-svg .today-guide{stroke:#d97732;stroke-width:1.2;stroke-dasharray:3 3}
+
+.deadline-rate-card{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:18px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(120deg,#fbfcff,#f5f8ff);margin-bottom:22px}
+.deadline-rate-label{font-size:13px;color:var(--muted);font-weight:700}
+.deadline-rate-value{display:flex;align-items:baseline;gap:4px;margin:3px 0}
+.deadline-rate-value strong{font-size:42px;line-height:1.15;letter-spacing:-1px}
+.deadline-rate-value span{font-size:17px;font-weight:800}
+.deadline-rate-ring{--rate:0;width:92px;height:92px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#6087db calc(var(--rate)*1%),#e7ebf3 0);position:relative}
+.deadline-rate-ring:before{content:"";position:absolute;inset:8px;border-radius:50%;background:#f8faff}
+.deadline-rate-ring span{position:relative;font-size:14px;font-weight:800}
+.progress-chart-heading{margin-top:20px}
+.deadline-chart{display:flex;align-items:stretch;gap:8px;min-height:185px;padding:16px 8px 0;border-bottom:1px solid var(--line);overflow-x:auto}
+.deadline-chart-column{min-width:34px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px}
+.deadline-chart-value{font-size:10px;color:var(--muted);height:14px;white-space:nowrap}
+.deadline-chart-track{height:125px;width:100%;max-width:34px;display:flex;align-items:flex-end;background:#f0f2f7;border-radius:7px 7px 0 0;overflow:hidden}
+.deadline-chart-bar{width:100%;min-height:2px;border-radius:6px 6px 0 0;background:#6c8fe0}
+.deadline-chart-bar.low{background:#d8a09a}
+.deadline-chart-label{font-size:10px;color:var(--muted);white-space:nowrap;padding-bottom:7px}
+.deadline-chart-empty{margin:auto;color:var(--muted);font-size:13px;text-align:center;padding:25px 10px}
+.deadline-chart-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:11px;color:var(--muted)}
+.legend-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:#6c8fe0}
+.legend-dot.missed{background:#d8a09a}
+.progress-method-note{font-size:11px;line-height:1.65;margin-top:14px}
+@media(max-width:600px){.period-task-score{gap:8px}.period-task-current,.period-task-best{padding:13px}.period-task-current strong{font-size:29px}.period-task-best strong{font-size:24px}.deadline-rate-card{padding:14px}.deadline-rate-value strong{font-size:36px}.deadline-rate-ring{width:78px;height:78px}.deadline-chart{gap:5px;padding-left:2px;padding-right:2px}.deadline-chart-column{min-width:28px}}
+.sticker-category-switch{display:inline-flex;align-items:center;gap:3px;padding:4px;margin:16px 0 10px;background:var(--surface-soft,var(--surface));border:1px solid var(--line);border-radius:12px}
+.sticker-category-button{appearance:none;border:1px solid transparent;border-radius:8px;padding:8px 16px;background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .16s ease,color .16s ease,box-shadow .16s ease;white-space:nowrap}
+.sticker-category-button.active{background:var(--card,#fff);color:var(--text);border-color:var(--line);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.sticker-category-button:hover:not(.active){color:var(--text);background:rgba(127,127,127,.07)}
+.sticker-category-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sticker-section{display:none;margin-top:12px}.sticker-section.active{display:block}.sticker-section[hidden]{display:none!important}
+.sticker-section-heading{display:none}
+.sticker-grid{animation:stickerViewIn .16s ease-out}
+@keyframes stickerViewIn{from{opacity:.72;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:420px){.sticker-category-switch{display:flex;width:100%}.sticker-category-button{flex:1;padding:8px 6px}}.sticker-section-heading{margin:0 0 8px 4px;font-size:14px;font-weight:650;letter-spacing:.04em;color:var(--muted)}.sticker-grid{display:flex;flex-wrap:wrap;align-items:flex-start;align-content:flex-start;justify-content:space-around;gap:3px 2px;margin-top:22px;padding:18px 8px 30px;border-radius:18px;background-color:#eaf8f6;background-image:radial-gradient(#b8e3df 1px,transparent 1px);background-size:17px 17px;min-height:320px;overflow:visible;position:relative} .sticker-item{position:relative;min-height:0;width:112px;min-width:88px;max-width:calc(50% - 8px);padding:10px 8px 9px;text-align:center;background:#fffdf9;border:2px solid #fff;border-radius:13px 15px 12px 14px;box-shadow:0 3px 0 rgba(31,89,95,.12),0 5px 12px rgba(31,89,95,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transform:rotate(var(--tilt,0deg));transition:transform .18s ease,box-shadow .18s ease;overflow:visible;z-index:1} .sticker-item:nth-child(11n+1){--tilt:-8deg;width:124px;margin-top:5px;margin-right:7px}
+.sticker-item:nth-child(11n+2){--tilt:5deg;width:82px;margin-top:24px;margin-left:4px}
+.sticker-item:nth-child(11n+3){--tilt:-2deg;width:105px;margin-top:0;margin-right:12px}
+.sticker-item:nth-child(11n+4){--tilt:9deg;width:92px;margin-top:31px;margin-left:5px}
+.sticker-item:nth-child(11n+5){--tilt:-5deg;width:135px;margin-top:11px;margin-right:2px}
+.sticker-item:nth-child(11n+6){--tilt:3deg;width:88px;margin-top:39px;margin-left:10px}
+.sticker-item:nth-child(11n+7){--tilt:-10deg;width:112px;margin-top:2px;margin-right:9px}
+.sticker-item:nth-child(11n+8){--tilt:7deg;width:98px;margin-top:19px;margin-left:3px}
+.sticker-item:nth-child(11n+9){--tilt:-4deg;width:78px;margin-top:44px;margin-right:6px}
+.sticker-item:nth-child(11n+10){--tilt:4deg;width:119px;margin-top:7px;margin-left:12px}
+.sticker-item:nth-child(11n){--tilt:-7deg;width:102px;margin-top:27px;margin-right:3px}.sticker-item:hover{transform:rotate(0deg) translateY(-3px);box-shadow:0 5px 0 rgba(31,89,95,.12),0 9px 16px rgba(31,89,95,.12)} .sticker-item .sticker-art{width:60px;height:60px;border-radius:17px 13px 18px 12px;display:grid;place-items:center;font-size:34px;background:#dce7e8;filter:grayscale(1);opacity:.58;flex-shrink:0} .sticker-item.unlocked{background:#fffdf9;border-color:#fff;box-shadow:0 3px 0 rgba(31,89,95,.12),0 5px 12px rgba(31,89,95,.08)} .sticker-item.unlocked .sticker-art{background:#fff0bd;filter:none;opacity:1;box-shadow:0 3px 0 #ead69b} .sticker-item strong{font-size:12px;line-height:1.35;overflow-wrap:anywhere}.sticker-item small{font-size:10px;line-height:1.35;color:var(--muted)} .sticker-item small+small{line-height:1.4}.sticker-item{gap:6px}
+.sticker-item .sticker-art{border:0;box-shadow:none;background:transparent!important;border-radius:0;width:76px;height:76px;font-size:49px;filter:none;opacity:1}
+.sticker-item.unlocked .sticker-art{box-shadow:none}
+.sticker-item:not(.unlocked) .sticker-art{color:#9db4b7;text-shadow:0 1px 0 #fff;filter:grayscale(1) brightness(.72);opacity:.58}.sticker-item .sticker-art{transform:rotate(calc(var(--tilt,0deg) * -0.35)) scale(var(--sticker-scale,1))}
+.sticker-image{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;filter:drop-shadow(0 2px 1px rgba(52,58,52,.18))}
+.sticker-image.locked-image{filter:grayscale(1) brightness(.78) opacity(.68) drop-shadow(0 2px 1px rgba(52,58,52,.10))}
+.sticker-item:has(.sticker-image){padding:4px 2px;background:transparent;border:0;box-shadow:none}
+.sticker-item:has(.sticker-image) .sticker-art{width:100%;height:auto;aspect-ratio:1/1;font-size:inherit}
+.sticker-item:has(.sticker-image):hover{background:transparent;box-shadow:none}
+.sticker-item:nth-child(7n+2) .sticker-art{--sticker-scale:.78}.sticker-item:nth-child(7n+4) .sticker-art{--sticker-scale:1.12}.sticker-item:nth-child(7n+6) .sticker-art{--sticker-scale:.9}
+.sticker-item .sticker-title,.sticker-item .sticker-category,.sticker-item .sticker-condition{display:none}
+.sticker-tooltip{display:none;position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%) rotate(0deg);width:190px;max-width:calc(100vw - 32px);padding:10px 12px;background:#fff;border:1px solid #c9dfdf;border-radius:12px;box-shadow:0 8px 22px rgba(23,65,70,.2);text-align:left;z-index:100;color:var(--text);white-space:normal;overflow-wrap:anywhere;pointer-events:none}
+.sticker-tooltip strong{display:block;font-size:13px;line-height:1.4;margin-bottom:4px}
+.sticker-tooltip small{display:block;font-size:11px;line-height:1.45;color:var(--muted);margin-top:2px}
+.sticker-item:hover,.sticker-item:focus-visible,.sticker-item.selected{z-index:30}
+.sticker-item:hover .sticker-tooltip,.sticker-item:focus-visible .sticker-tooltip,.sticker-item.selected .sticker-tooltip{display:block}
+.sticker-item{cursor:pointer;padding:6px 4px;background:transparent;border-color:transparent;box-shadow:none}
+.sticker-item:hover{box-shadow:none}
+.sticker-item.unlocked{background:transparent;border-color:transparent;box-shadow:none}
+.sticker-item.unlocked .sticker-art{background:transparent!important}
+.sticker-item:focus-visible{outline:2px solid #62b8b3;outline-offset:2px}
+
+@media(max-width:700px){.sticker-grid{gap:2px 0;padding:12px 4px 22px}.sticker-item{min-width:72px;max-width:48%;padding:5px 3px}.sticker-item:nth-child(11n+1){width:39%;margin-top:3px}.sticker-item:nth-child(11n+2){width:27%;margin-top:17px}.sticker-item:nth-child(11n+3){width:34%;margin-top:0}.sticker-item:nth-child(11n+4){width:30%;margin-top:22px}.sticker-item:nth-child(11n+5){width:42%;margin-top:7px}.sticker-item:nth-child(11n+6){width:28%;margin-top:26px}.sticker-item:nth-child(11n+7){width:36%;margin-top:1px}.sticker-item:nth-child(11n+8){width:32%;margin-top:14px}.sticker-item:nth-child(11n+9){width:25%;margin-top:28px}.sticker-item:nth-child(11n+10){width:38%;margin-top:5px}.sticker-item:nth-child(11n){width:33%;margin-top:19px}.sticker-item .sticker-art{width:50px;height:50px;font-size:29px}.sticker-item strong{font-size:11px}} @media(max-width:700px){.achievement-menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.achievement-menu-card{min-height:118px;padding:12px}.achievement-menu-desc{font-size:10px}}
+
+.achievement-hero{display:flex;align-items:center;gap:17px;padding:22px;border-radius:16px;background:linear-gradient(115deg,#fff7df,#fff 55%,#eef3ff);border:1px solid #f1e5c6;margin:10px 0 15px}
+.achievement-hero-icon{width:72px;height:72px;flex:0 0 72px;display:grid;place-items:center;border-radius:22px;background:#ffedb5;font-size:38px;box-shadow:inset 0 0 0 2px #fff8df}
+.achievement-eyebrow{font-size:10px;font-weight:800;letter-spacing:.18em;color:#9b7620;margin-bottom:5px}
+.achievement-hero-title{font-size:22px;font-weight:850;letter-spacing:.01em;margin-bottom:5px}
+.achievement-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.achievement-stat{padding:15px;border:1px solid var(--line);border-radius:13px;background:#fbfcff;display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}
+.achievement-stat span{width:100%;font-size:12px;color:var(--muted)}
+.achievement-stat strong{font-size:27px;letter-spacing:-.03em}.achievement-stat small{font-size:12px;color:var(--muted)}
+.achievement-section{margin-top:22px}.achievement-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}.achievement-section-head h3{font-size:15px;margin:0}
+.achievement-board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin:0 0 10px}
+.achievement-board .stamp-cell{min-height:64px;font-size:23px;border-radius:12px}
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px}
+.achievement-badge{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fafbfe;opacity:.55}
+.achievement-badge.unlocked{opacity:1;background:#fff9e9;border-color:#f0d99b}
+.achievement-badge-icon{width:39px;height:39px;border-radius:12px;display:grid;place-items:center;background:#edf0f5;font-size:21px;flex-shrink:0}
+.achievement-badge.unlocked .achievement-badge-icon{background:#ffedb5}
+.achievement-badge strong{display:block;font-size:12px}.achievement-badge small{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.achievement-history{display:grid;gap:8px}
+.achievement-history-item{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+.achievement-history-stamp{width:37px;height:37px;border-radius:50%;display:grid;place-items:center;background:#fff0bf;color:#8a6118;font-size:18px;flex-shrink:0}
+.achievement-history-main{min-width:0;flex:1}.achievement-history-main strong{display:block;font-size:13px;overflow-wrap:anywhere}.achievement-history-main small{font-size:11px;color:var(--muted)}
+.achievement-empty{border:1px dashed #d7dce6;background:#fafbfe;color:var(--muted);text-align:center;padding:24px 14px;border-radius:12px;font-size:13px}
+@media(max-width:560px){.achievement-stats{grid-template-columns:1fr 1fr}.achievement-stat:last-child{grid-column:1/-1}.achievement-hero{padding:16px}.achievement-hero-icon{width:58px;height:58px;flex-basis:58px;font-size:30px}.achievement-hero-title{font-size:19px}.achievement-board{gap:5px}.achievement-board .stamp-cell{min-height:48px;font-size:19px}}
+
+
+.todo-tabs{display:flex;gap:8px;margin:0 0 14px;padding:4px;background:var(--surface-2,#f1f3f6);border-radius:12px}
+.todo-tabs button{flex:1;border:0;background:transparent;color:var(--muted,#667085);padding:10px 12px;border-radius:9px;font-weight:700;cursor:pointer}
+.todo-tabs button.active{background:var(--panel,#fff);color:var(--text,#20242c);box-shadow:0 1px 4px #00000012}
+.operation-view{display:none}
+.operation-list{display:grid;gap:10px;margin:12px 0}
+.operation-card{border:1px solid var(--line,#e1e5eb);border-radius:12px;padding:14px;background:var(--panel,#fff)}
+.pill{font-size:11px;padding:4px 8px;border-radius:99px;background:var(--surface-2,#f1f3f6);white-space:nowrap}.operation-card h3{margin:0;font-size:15px}
+.operation-meta{font-size:12px;color:var(--muted,#667085);margin-top:5px}
+.operation-progress{height:7px;border-radius:99px;background:var(--surface-2,#edf0f4);overflow:hidden;margin:10px 0 5px}
+.operation-progress>div{height:100%;background:var(--accent,#3869c8);border-radius:99px}
+.operation-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.operation-form{border:1px solid var(--line,#e1e5eb);border-radius:12px;padding:14px;margin-top:14px}
+.operation-form label{display:block;font-size:12px;font-weight:700;margin:10px 0 5px}
+.operation-form input,.operation-form select,.operation-form textarea{width:100%;box-sizing:border-box}
+.operation-form textarea{min-height:65px;resize:vertical}
+.operation-empty{padding:22px 12px;text-align:center;color:var(--muted,#667085);border:1px dashed var(--line,#d6dce5);border-radius:12px}
+
+
+/* TaskFlow mobile usability pass: scoped to touch-sized viewports */
+@media (max-width: 760px) {
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { overflow-x: hidden; }
+  .app { width: 100%; max-width: 100%; padding: 12px 10px calc(96px + env(safe-area-inset-bottom, 0px)); }
+  .top { gap: 10px; margin-bottom: 12px; }
+  .top > * { max-width: 100%; min-width: 0; }
+  .brand { min-width: 0; }
+  .brand h1 { font-size: 19px; }
+  .nav { width: 100%; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+  .nav button { flex: 0 0 auto; min-height: 42px; white-space: nowrap; }
+  button, .sticker-category-button, .achievement-menu-card { touch-action: manipulation; }
+  button { min-height: 42px; }
+  button.ghost { min-height: 40px; }
+  input, select, textarea { min-height: 44px; font-size: 16px; }
+  textarea { min-height: 88px; }
+  .layout, .panel, .achievement-panel, .operation-card, .task-list, .records-columns { min-width: 0; }
+  .panel { padding: 12px; border-radius: 14px; }
+  .panelhead, .weekbar { flex-wrap: wrap; align-items: flex-start; }
+  .weekbar > * { min-width: 0; }
+  .weekbar .date-nav { flex-wrap: wrap; }
+  .date-nav button { min-height: 40px; padding: 8px 10px; }
+  .calendar-wrap { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+  .calendar { min-width: 680px; }
+  .task-list { grid-template-columns: minmax(0, 1fr); }
+  .formgrid { grid-template-columns: minmax(0, 1fr); }
+  .formgrid > * { min-width: 0; }
+  .modalback { align-items: flex-end; padding: 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .modal { width: 100%; max-width: none; max-height: 88dvh; border-radius: 18px 18px 0 0; padding: 18px 14px calc(18px + env(safe-area-inset-bottom, 0px)); }
+  .modal-actions { flex-wrap: wrap; }
+  .modal-actions button { flex: 1 1 120px; }
+  .bottomnav { padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); min-height: 58px; }
+  .bottomnav button { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 6px 3px; line-height: 1.25; }
+  .toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px)); max-width: calc(100vw - 24px); text-align: center; }
+  .sticker-grid { min-width: 0; }
+  .sticker-item { min-width: 0; }
+  .operation-card button { max-width: 100%; }
+  .reward-back { padding: 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+  .reward-card { max-width: 100%; }
+}
+@media (max-width: 380px) {
+  .app { padding-left: 8px; padding-right: 8px; }
+  .panel { padding: 10px; }
+  .brand p { max-width: 260px; }
+  .nav { gap: 2px; }
+  .nav button { padding: 8px 10px; font-size: 13px; }
+  .bottomnav button { font-size: 11px; }
+}
+
+
+/* Mobile task list overlay above calendar */
+.mobile-tasklist-backdrop{display:flex;position:fixed;inset:0;z-index:1002;background:rgba(13,22,38,.42);opacity:0;visibility:hidden;pointer-events:none;align-items:flex-end;padding-top:16px;transition:opacity .22s ease,visibility .22s ease}
+.mobile-tasklist-backdrop.open{opacity:1;visibility:visible;pointer-events:auto}
+.mobile-tasklist-sheet{width:100%;max-height:min(82dvh,820px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--card,#fff);color:var(--ink,#182230);border-radius:22px 22px 0 0;padding:8px 14px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -12px 40px rgba(0,0,0,.16);transform:translateY(100%);transition:transform .26s cubic-bezier(.2,.75,.25,1)}
+.mobile-tasklist-backdrop.open .mobile-tasklist-sheet{transform:translateY(0)}
+.mobile-tasklist-items{display:flex;flex-direction:column;gap:9px;padding-bottom:8px}
+.mobile-tasklist-item{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--line,#dce3ee);border-radius:13px;background:var(--card,#fff);min-width:0}
+.mobile-tasklist-info{flex:1;min-width:0}
+.mobile-tasklist-name{font-weight:700;overflow-wrap:anywhere}
+.mobile-tasklist-meta{font-size:12px;color:var(--muted,#667085);margin-top:4px}
+.mobile-tasklist-place{flex:0 0 auto;background:#3869c8;color:#fff;border:0;border-radius:10px;padding:10px 11px;font-size:12px;font-weight:700;min-height:42px}
+.mobile-tasklist-empty{padding:24px 12px;text-align:center;color:var(--muted,#667085);border:1px dashed var(--line,#dce3ee);border-radius:12px}
+@media(min-width:761px){.mobile-tasklist-backdrop{display:none}}
+/* Mobile calendar-first layout and slide-up add sheet */
+.mobile-add-backdrop { display:none; }
+@media (max-width:760px) {
+  .layout { display:flex; flex-direction:column; }
+  #calendar-panel { order:0; }
+  #todo-panel { order:1; }
+  #calendar-panel { scroll-margin-top:8px; }
+  #calendar-panel .panelhead { gap:8px; }
+  #calendar-panel .panelhead > div { flex:1 1 180px; }
+  #calendar-panel .panelhead select { flex:0 0 auto; max-width:110px; }
+  .mobile-add-backdrop { display:flex; position:fixed; inset:0; z-index:1000; background:rgba(13,22,38,.42); opacity:0; visibility:hidden; pointer-events:none; align-items:flex-end; transition:opacity .22s ease,visibility .22s ease; padding-top:16px; }
+  .mobile-add-backdrop.open { opacity:1; visibility:visible; pointer-events:auto; }
+  .mobile-add-sheet { width:100%; max-height: min(90dvh, 900px); overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; background:var(--card,#fff); color:var(--ink,#182230); border-radius:22px 22px 0 0; padding:8px 14px calc(18px + env(safe-area-inset-bottom,0px)); box-shadow:0 -12px 40px rgba(0,0,0,.16); transform:translateY(100%); transition:transform .26s cubic-bezier(.2,.75,.25,1); }
+  .mobile-add-backdrop.open .mobile-add-sheet { transform:translateY(0); }
+  .mobile-sheet-handle { width:42px; height:5px; border-radius:99px; background:#cbd2dc; margin:3px auto 12px; }
+  .mobile-sheet-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+  .mobile-sheet-head h2 { margin:0; font-size:18px; }
+  .mobile-sheet-head p { margin:3px 0 0; color:var(--muted,#667085); font-size:12px; }
+  .mobile-sheet-close { min-height:40px; }
+  .mobile-sheet-tabs { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:4px; background:var(--surface-soft,#f1f3f7); border-radius:12px; margin-bottom:12px; }
+  .mobile-sheet-tabs button { min-height:44px; background:transparent; color:var(--muted,#667085); padding:9px 6px; }
+  .mobile-sheet-tabs button.active { background:var(--card,#fff); color:var(--ink,#182230); box-shadow:0 1px 4px rgba(0,0,0,.1); }
+  .mobile-sheet-form-slot { min-width:0; }
+  .mobile-sheet-form-slot[hidden] { display:none!important; }
+  #mobile-add-sheet #quick-add, #mobile-add-sheet #operation-form { display:block; border-top:0; margin:0; padding:0; }
+  #mobile-add-sheet #quick-add > h2 { display:none; }
+  #mobile-add-sheet .notification-row { flex-wrap:wrap; }
+  #mobile-add-sheet .operation-actions { display:grid; grid-template-columns:1fr; gap:8px; }
+  #mobile-add-sheet .operation-actions button { width:100%; }
+  body.mobile-sheet-open { overflow:hidden; }
+}
+
+
+/* Mobile sticker collection: compact, evenly packed grid */
+@media (max-width: 700px) {
+  #achievement-page-stickers .achievement-hero {
+    gap: 10px;
+    padding: 12px;
+    margin: 6px 0 10px;
+    border-radius: 13px;
+  }
+  #achievement-page-stickers .achievement-hero-icon {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+    border-radius: 14px;
+    font-size: 26px;
+  }
+  #achievement-page-stickers .achievement-hero-title {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+  #achievement-page-stickers .achievement-hero .sub {
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  #achievement-page-stickers .sticker-category-switch {
+    margin: 8px 0 4px;
+  }
+  #achievement-page-stickers .sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
+    justify-content: initial;
+    gap: 7px 2px;
+    margin-top: 8px;
+    padding: 10px 6px 14px;
+    min-height: 0;
+    border-radius: 14px;
+    background-size: 13px 13px;
+  }
+  #achievement-page-stickers .sticker-item,
+  #achievement-page-stickers .sticker-item:nth-child(n) {
+    width: auto !important;
+    min-width: 0;
+    max-width: none;
+    margin: 0 !important;
+    padding: 3px 2px;
+    gap: 3px;
+    transform: none;
+  }
+  #achievement-page-stickers .sticker-item .sticker-art {
+    width: 100%;
+    max-width: 54px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    justify-self: center;
+    font-size: 27px;
+  }
+  #achievement-page-stickers .sticker-item strong {
+    font-size: 9px;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+  #achievement-page-stickers .sticker-tooltip {
+    width: 170px;
+  }
+}
+
+</style>
+
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#3869c8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TaskFlow">
+<link rel="apple-touch-icon" href="./icons/taskflow-192.png">
+
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo">✓</div><div><h1>TaskFlow</h1><p>To Do と達成の記録をひとつに</p></div></div>
+    <nav class="nav" aria-label="メインメニュー">
+      <button id="nav-todo" class="active" onclick="setView('todo')">☷ To Do</button>
+      <button id="nav-achievements" onclick="setView('achievements')">✦ アチーブメント</button>
+    </nav>
+  </header>
+  <div class="todaybar">
+    <div class="stat"><b id="stat-total">0</b>タスク</div>
+    <div class="stat"><b id="stat-done">0</b>完了</div>
+    <div class="stat"><b id="stat-unscheduled">0</b>未配置</div>
+  </div>
+  <div class="layout">
+    <section class="panel" id="todo-panel">
+      <div class="panelhead"><div><h2>To Do</h2><div class="sub">日々の行動と、達成したい目標を管理</div></div><button id="todo-add-button" onclick="focusNewTask()">＋ タスク追加</button></div>
+      <div class="todo-tabs" role="tablist" aria-label="To Doの種類">
+        <button id="todo-tab-tasks" class="active" role="tab" aria-selected="true" onclick="setTodoTab('tasks')">☷ タスク</button>
+        <button id="todo-tab-operations" role="tab" aria-selected="false" onclick="setTodoTab('operations')">◎ オペレーション</button>
+      </div>
+      <div id="task-view">
+      <input id="search" placeholder="タスクを検索…" oninput="renderTasks()" aria-label="タスクを検索">
+      <div class="filters">
+        <button class="secondary active" data-filter="all" onclick="setFilter('all',this)">すべて</button>
+        <button class="secondary" data-filter="unscheduled" onclick="setFilter('unscheduled',this)">未配置</button>
+        <button class="secondary" data-filter="open" onclick="setFilter('open',this)">未完了</button>
+        <button class="secondary" data-filter="done" onclick="setFilter('done',this)">完了済み</button>
+      </div>
+      <div id="task-list"><section class="task-section"><div class="task-section-head"><span>今日すること</span><span class="section-count" id="today-count"></span></div><div id="today-list" class="task-list section-drop" data-section="today"></div></section><section class="task-section"><div class="task-section-head"><span>今後すること</span><span class="section-count" id="future-count"></span></div><div id="future-list" class="task-list section-drop" data-section="future"></div></section></div>
+      <div id="quick-add-home"></div><div class="addform" id="quick-add">
+        <h2 style="font-size:14px;margin-bottom:5px">新しいタスク</h2>
+        <label for="new-title">タスク名 *</label><input id="new-title" placeholder="例：数学の問題集" maxlength="100">
+        <div class="formgrid">
+          <div><label for="new-minutes">所要時間（分）</label><input id="new-minutes" type="number" min="5" step="5" value="30"></div>
+          <div><label for="new-priority">優先度</label><select id="new-priority"><option value="medium">中</option><option value="high">高</option><option value="low">低</option></select></div>
+          <div class="full"><label for="new-due">締切（任意）</label><input id="new-due" type="date"></div><div class="full"><label for="new-color">カレンダー表示色</label><div class="color-row"><input id="new-color" type="color" value="#3869c8"><span class="sub">タスクごとに色を選べます</span></div></div>
+        </div>
+        <button style="width:100%;margin-top:12px" onclick="addTask()">タスクを保存</button><div class="notification-row"><button class="secondary" onclick="enableNotifications()">🔔 通知を許可</button><span class="sub" id="notification-status">通知は未設定です</span></div>
+      </div>
+      </div><!-- /task-view -->
+      <div id="operation-view" class="operation-view">
+        <div class="sub">期限と達成条件を持つ目標を管理します。タスクの完了と、目標の達成は別々に記録します。</div>
+        <div id="operation-list" class="operation-list"></div>
+        <div id="operation-form-home"></div><div class="operation-form" id="operation-form">
+          <h3 id="operation-form-title" style="margin:0;font-size:15px">新しいオペレーション</h3>
+          <input type="hidden" id="operation-edit-id">
+          <label for="operation-name">名称 *</label><input id="operation-name" maxlength="120" placeholder="例：数学の定期考査">
+          <label for="operation-deadline">期限 *</label><input id="operation-deadline" type="date">
+          <label for="operation-mode">進捗方式</label>
+          <select id="operation-mode" onchange="updateOperationModeFields()"><option value="tasks">タスク連動型（関連タスクの完了率）</option><option value="result">結果入力型（得点・成果などを記録）</option></select>
+          <div id="operation-condition-fields" style="display:none">
+          <label for="operation-condition-type">達成条件の種類</label>
+          <select id="operation-condition-type" onchange="updateOperationConditionFields()"><option value="number">数値</option><option value="text">自由記述</option></select>
+          <div id="operation-number-fields">
+            <label for="operation-target">目標値（数値）</label><input id="operation-target" type="number" step="any" placeholder="例：80">
+            <label for="operation-unit">単位</label><input id="operation-unit" maxlength="20" placeholder="例：点、作品">
+            <label for="operation-comparator">達成条件</label><select id="operation-comparator"><option value="gte">以上</option><option value="lte">以下</option><option value="eq">ちょうど</option></select>
+          </div>
+          <div id="operation-text-fields" style="display:none">
+            <label for="operation-text-condition">達成条件</label><textarea id="operation-text-condition" placeholder="例：自分で納得できる品質に仕上げる"></textarea>
+          </div>
+          <label for="operation-notes">メモ（任意）</label><textarea id="operation-notes" placeholder="目標の背景や補足"></textarea>
+          </div><!-- /operation-condition-fields -->
+          <div id="operation-linked-tasks-fields">
+            <label>紐づける関連タスク</label><div id="operation-task-options" class="sub">関連タスクの完了状態から進捗率を自動計算します。</div>
+          </div>
+          <div id="operation-result-fields" style="display:none">
+            <label for="operation-actual">実績値（結果が出たら入力）</label><input id="operation-actual" type="number" step="any" placeholder="例：85">
+          </div>
+          <div class="operation-actions"><button onclick="saveOperation()">オペレーションを保存</button><button class="secondary" onclick="resetOperationForm()">入力をクリア</button></div>
+        </div>
+      </div>
+    </section>
+    <section class="panel" id="calendar-panel">
+      <div class="panelhead"><div><h2>カレンダー</h2><div class="sub">タップで配置 · 長押し/ドラッグで移動 · ブロックの長さ＝所要時間</div></div><select id="view-mode" style="width:auto" onchange="renderCalendar()"><option value="week">週表示</option><option value="day">日表示</option><option value="month">月表示</option></select></div>
+      <div class="weekbar"><div class="date-nav"><button class="secondary" onclick="shiftWeek(-1)">‹</button><span class="week-title" id="week-title"></span><button class="secondary" onclick="shiftWeek(1)">›</button></div><button class="secondary" onclick="goToday()">今日の日付に戻る</button></div>
+      <div class="notice" id="overlap-notice"></div><div class="notice calendar-placement-hint" id="calendar-placement-hint"></div>
+      <div class="calendar-wrap"><div class="calendar" id="calendar"></div></div>
+      <div class="emptyhint mobile-hint">未配置タスクをカレンダーの空き時間へドラッグするか、タスクの「配置」から日時を選んでください。</div>
+    </section>
+  </div>
+<section class="panel achievement-panel" id="achievement-panel" style="display:none">
+  <div class="panelhead"><div><h2>✦ アチーブメント</h2><div class="sub">積み重ねた達成を、ここで振り返ろう。</div></div><button class="secondary" onclick="setView('todo')">To Do に戻る</button></div>
+  <div class="achievement-menu" aria-label="アチーブメントの項目">
+    <button class="achievement-menu-card active" data-achievement-tab="stamps" onclick="setAchievementTab('stamps')"><span class="achievement-menu-icon">🎟️</span><span class="achievement-menu-title">スタンプカード</span><span class="achievement-menu-desc">達成するたびにスタンプを集めよう</span></button>
+    <button class="achievement-menu-card" data-achievement-tab="progress" onclick="setAchievementTab('progress')"><span class="achievement-menu-icon">📈</span><span class="achievement-menu-title">達成度</span><span class="achievement-menu-desc">積み重ねを数字で振り返る</span></button>
+    <button class="achievement-menu-card" data-achievement-tab="records" onclick="setAchievementTab('records')"><span class="achievement-menu-icon">📜</span><span class="achievement-menu-title">実績</span><span class="achievement-menu-desc">完了したタスクの履歴</span></button>
+    <button class="achievement-menu-card" data-achievement-tab="stickers" onclick="setAchievementTab('stickers')"><span class="achievement-menu-icon">🌟</span><span class="achievement-menu-title">ステッカー</span><span class="achievement-menu-desc">節目を達成してコレクション</span></button>
+  </div>
+
+  <div class="achievement-page" id="achievement-page-stamps">
+    <div class="achievement-hero">
+      <div class="achievement-hero-icon">🏆</div>
+      <div><div class="achievement-eyebrow">YOUR STAMP CARD</div><div class="achievement-hero-title" id="achievement-encouragement">ここから、ひとつずつ。</div><div class="sub" id="achievement-summary">最初のタスクを完了すると、ここに記録が増えていきます。</div></div>
+    </div>
+    <div class="achievement-stats">
+      <div class="achievement-stat"><span>完了したタスク</span><strong id="achievement-total">0</strong><small>個</small></div>
+      <div class="achievement-stat"><span>取り組んだ時間</span><strong id="achievement-minutes">0</strong><small>分</small></div>
+      <div class="achievement-stat"><span>獲得スタンプ</span><strong id="achievement-stamps">0</strong><small>個</small></div>
+    </div>
+    <div class="achievement-section">
+      <div class="achievement-section-head"><h3>スタンプカード</h3><span class="sub" id="achievement-card-count">1枚目のカード</span></div>
+      <div class="stamp-board achievement-board" id="achievement-stamp-board"></div>
+      <div class="sub" id="achievement-stamp-note">タスクを完了するたびに、スタンプがひとつ増えます。</div>
+    </div>
+  </div>
+  <div class="achievement-page" id="achievement-page-progress" style="display:none">
+    <div class="achievement-hero"><div class="achievement-hero-icon">📈</div><div><div class="achievement-eyebrow">YOUR PROGRESS</div><div class="achievement-hero-title">積み重ねを見える形に</div><div class="sub">これまでの完了数や取り組んだ時間を確認できます。</div></div></div>
+    <div class="achievement-stats">
+      <div class="achievement-stat"><span>完了したタスク</span><strong id="progress-total">0</strong><small>個（全期間）</small></div>
+      <div class="achievement-stat"><span>取り組んだ時間</span><strong id="progress-minutes">0</strong><small>分（全期間）</small></div>
+      <div class="achievement-stat"><span>達成した節目</span><strong id="progress-milestones">0</strong><small>個</small></div>
+    </div>
+    <div class="achievement-section">
+      <div class="achievement-section-head"><h3>期間内にこなしたタスク</h3><span class="sub" id="period-task-label">今月</span></div>
+      <div class="period-task-score">
+        <div class="period-task-current"><span class="sub">この期間</span><div><strong id="period-task-count">0</strong><span>個</span></div></div>
+        <div class="period-task-best"><span class="sub" id="period-best-label">過去最高（1ヶ月）</span><div><strong id="period-task-best">0</strong><span>個</span></div><small id="period-task-best-note">記録された完了履歴から集計</small></div>
+      </div>
+    </div>
+    <div class="achievement-section">
+      <div class="achievement-section-head"><h3>期限内の達成率</h3><span class="sub">締切が設定されたタスクが対象</span></div>
+      <div class="progress-period-switch" role="group" aria-label="集計期間">
+        <button type="button" class="secondary active" id="progress-period-month" onclick="setProgressPeriod('month')">一ヶ月</button>
+        <button type="button" class="secondary" id="progress-period-all" onclick="setProgressPeriod('all')">全期間</button>
+      </div>
+      <div class="deadline-rate-card">
+        <div><div class="deadline-rate-label" id="deadline-rate-period">今月の期限内達成率</div><div class="deadline-rate-value"><strong id="deadline-rate-value">—</strong><span>%</span></div><div class="sub" id="deadline-rate-detail">締切のあるタスクが集計対象です。</div></div>
+        <div class="deadline-rate-ring" id="deadline-rate-ring"><span id="deadline-rate-ring-label">—%</span></div>
+      </div>
+      <div class="achievement-section-head progress-chart-heading"><h3>達成率の推移</h3><span class="sub" id="deadline-chart-caption">日ごとの達成率</span></div>
+      <div class="deadline-chart" id="deadline-chart" role="img" aria-label="期限内達成率のグラフ"></div>
+      <div class="deadline-chart-legend"><span><i class="legend-dot ontime"></i>期限内に完了</span><span><i class="legend-dot missed"></i>期限超過・未完了</span></div>
+      <p class="sub progress-method-note">※ 締切のないタスクは対象外です。締切日を過ぎても未完了のタスクは、期限内に達成できなかったものとして集計します。締切が今日以降の未完了タスクは、締切日を迎えるまで集計に含めません。</p>
+    </div>
+    <div class="achievement-section">
+      <div class="achievement-section-head"><h3>評価</h3><span class="sub">数字を振り返るための目安</span></div>
+      <div class="progress-evaluation" id="progress-evaluation"><div class="evaluation-icon" id="evaluation-icon">🌱</div><div><strong id="evaluation-title">ここからスタート</strong><p id="evaluation-description">記録が集まると、期間内の達成状況を振り返れるようになります。</p></div></div>
+      <p class="sub progress-method-note">評価は期限内達成率をもとにした目安です。あなた自身の価値や努力のすべてを判定するものではありません。</p>
+    </div>
+    <div class="achievement-empty" id="progress-note">まずはひとつ、タスクを完了してみましょう。</div>
+  </div>
+  <div class="achievement-page" id="achievement-page-records" style="display:none">
+    <div class="achievement-hero"><div class="achievement-hero-icon">📜</div><div><div class="achievement-eyebrow">YOUR RECORDS</div><div class="achievement-hero-title">歩んできた記録</div><div class="sub">完了したタスクの節目や、ひとつひとつの達成を振り返ります。</div></div></div>
+    <div class="records-columns">
+      <section class="achievement-section records-column">
+        <div class="achievement-section-head"><h3>達成の記録</h3><span class="sub">新しい順</span></div>
+        <div class="achievement-history" id="achievement-history"></div>
+      </section>
+      <section class="achievement-section records-column">
+        <div class="achievement-section-head"><h3>節目のバッジ</h3><span class="sub">達成の積み重ね</span></div>
+        <div class="badge-grid" id="achievement-badges"></div>
+      </section>
+    </div>
+  </div>
+  <div class="achievement-page" id="achievement-page-stickers" style="display:none">
+    <div class="achievement-hero"><div class="achievement-hero-icon">🌟</div><div><div class="achievement-eyebrow">STICKER COLLECTION</div><div class="achievement-hero-title">ステッカーコレクション</div><div class="sub">タスクを完了して、いろいろなステッカーを集めましょう。</div></div></div>
+    <div class="sticker-category-switch" role="tablist" aria-label="ステッカーの種類">
+  <button type="button" class="sticker-category-button active" data-sticker-view="milestones" aria-pressed="true" aria-selected="true" tabindex="0">節目のバッジ</button>
+  <button type="button" class="sticker-category-button" data-sticker-view="missions" aria-pressed="false" aria-selected="false" tabindex="-1">ミッション</button>
+ </div>
+ <section class="sticker-section active" id="sticker-section-milestones" aria-labelledby="sticker-milestone-heading">
+  <h3 id="sticker-milestone-heading" class="sticker-section-heading">節目のバッジ</h3>
+  <div class="sticker-grid" id="achievement-stickers-milestones"></div>
+ </section>
+ <section class="sticker-section" id="sticker-section-missions" aria-labelledby="sticker-mission-heading" hidden>
+  <h3 id="sticker-mission-heading" class="sticker-section-heading">ミッション</h3>
+  <div class="sticker-grid" id="achievement-stickers-missions"></div>
+ </section>
+  </div>
+</section>
+</div>
+
+<div id="mobile-add-backdrop" class="mobile-add-backdrop" aria-hidden="true" onclick="if(event.target===this)closeMobileAddSheet()">
+  <section id="mobile-add-sheet" class="mobile-add-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-add-title">
+    <div class="mobile-sheet-handle" aria-hidden="true"></div>
+    <div class="mobile-sheet-head">
+      <div><h2 id="mobile-add-title">追加</h2><p>タスクや目標を作成</p></div>
+      <button type="button" class="secondary mobile-sheet-close" aria-label="閉じる" onclick="closeMobileAddSheet()">閉じる</button>
+    </div>
+    <div class="mobile-sheet-tabs" role="tablist" aria-label="追加する項目">
+      <button type="button" id="mobile-add-tab-task" class="active" role="tab" aria-selected="true" onclick="switchMobileAddSheet('task')">＋ タスク</button>
+      <button type="button" id="mobile-add-tab-operation" role="tab" aria-selected="false" onclick="switchMobileAddSheet('operation')">◎ オペレーション</button>
+    </div>
+    <div id="mobile-add-task-slot" class="mobile-sheet-form-slot"></div>
+    <div id="mobile-add-operation-slot" class="mobile-sheet-form-slot" hidden></div>
+  </section>
+</div>
+<div class="mobile-tasklist-backdrop" id="mobile-tasklist-backdrop" aria-hidden="true">
+  <section class="mobile-tasklist-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-tasklist-title">
+    <div class="mobile-sheet-handle" aria-hidden="true"></div>
+    <div class="mobile-sheet-head">
+      <div><h2 id="mobile-tasklist-title">追加済みタスク一覧</h2><p>カレンダーに追加したいタスクを選んでください</p></div>
+      <button type="button" class="secondary mobile-sheet-close" onclick="closeTaskListSheet()">閉じる</button>
+    </div>
+    <div id="mobile-tasklist-items" class="mobile-tasklist-items"></div>
+  </section>
+</div>
+<div class="bottomnav"><button class="bottomnav-add" onclick="focusNewTask()" aria-label="タスクを追加">＋ タスク追加</button><button class="bottomnav-list active" id="bottom-task-list" onclick="showTaskList()" aria-label="追加済みタスク一覧を確認">☷ 追加済みタスク一覧</button></div>
+<div class="modalback" id="modalback" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+ <div class="modal">
+  <h2 id="modal-title">タスクを編集</h2><div class="sub" id="modal-sub">タスク情報と予定日時を編集します</div>
+  <input type="hidden" id="edit-id">
+  <label for="edit-title">タスク名 *</label><input id="edit-title" maxlength="100">
+  <div class="formgrid">
+   <div><label for="edit-minutes">所要時間（分）</label><input id="edit-minutes" type="number" min="5" step="5"></div>
+   <div><label for="edit-priority">優先度</label><select id="edit-priority"><option value="medium">中</option><option value="high">高</option><option value="low">低</option></select></div>
+   <div class="full"><label for="edit-due">締切</label><input id="edit-due" type="date"></div>
+   <div><label for="edit-date">予定日（未配置可）</label><input id="edit-date" type="date"></div>
+   <div><label for="edit-time">開始時刻</label><select id="edit-time"></select></div>
+  </div>
+  <label for="edit-color">カレンダー表示色</label><div class="color-row"><input id="edit-color" type="color" value="#3869c8"><span class="sub">予定ブロックの色</span></div>
+  <label for="edit-notes">メモ</label><textarea id="edit-notes" rows="2" placeholder="任意"></textarea>
+  <div class="modal-actions"><button class="danger" id="delete-btn" onclick="deleteTask()">削除</button><button class="secondary" onclick="closeModal()">キャンセル</button><button onclick="saveEdit()">保存</button></div>
+ </div>
+</div>
+<div class="reward-back" id="reward-back" role="dialog" aria-modal="true" aria-labelledby="reward-title" onclick="if(event.target===this)closeReward()">
+ <div class="reward-card">
+  <div class="reward-kicker">TASKFLOW · ACHIEVEMENT</div>
+  <div class="reward-stamp" id="reward-stamp" aria-hidden="true">★</div>
+  <div class="reward-title" id="reward-title">やり遂げたね！</div>
+  <div class="reward-task" id="reward-task"></div>
+  <div class="reward-message" id="reward-message">ひとつ、ちゃんと前に進めたね。<br>その積み重ねは、きちんとあなたのもの。</div>
+  <div class="stamp-board" id="stamp-board" aria-label="達成スタンプカード"></div>
+  <div class="reward-count" id="reward-count"></div>
+  <button class="reward-button" onclick="closeReward()">受け取る！</button>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+<div id="startup-error" style="display:none;max-width:760px;margin:24px auto;padding:16px;background:#fff0ef;color:#8d2929;border:1px solid #efc1be;border-radius:12px">
+  アプリの起動中にエラーが発生しました。ページを再読み込みしてください。
+</div>
+<script>
+const OPERATION_KEY='taskflow_operations_v1';
+const KEY='taskflow-prototype-v2';
+const REWARD_KEY='taskflow-rewards-v1';
+const EVENT_KEY='taskflow-events-v1';
+const MISSION_KEY='taskflow-missions-v1';
+let rewardHistory=[],eventHistory=[],unlockedMissions=[];
+function trackEvent(type,data={}){eventHistory.push({type,at:Date.now(),...data});if(eventHistory.length>3000)eventHistory=eventHistory.slice(-3000);try{localStorage.setItem(EVENT_KEY,JSON.stringify(eventHistory))}catch(e){/* event tracking remains active for this session */}}
+function saveMissionUnlocks(){try{localStorage.setItem(MISSION_KEY,JSON.stringify(unlockedMissions))}catch(e){/* keep current-session unlocks */}}
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12)};
+const addDays=(d,n)=>{let x=new Date(d);x.setDate(x.getDate()+n);return x};
+const monday=d=>{let x=parse(iso(d));x.setDate(x.getDate()-((x.getDay()+6)%7));return x};
+const fmt=d=>`${d.getMonth()+1}/${d.getDate()}`;
+const weekdays=['日','月','火','水','木','金','土'];
+let tasks=[],operations=[],filter='all',view='todo',todoTab='tasks',weekStart=parse(iso(new Date())),dragId=null;
+function seed(){let t=iso(new Date());return [
+{id:uid(),title:'数学の問題集',minutes:45,priority:'high',due:iso(addDays(new Date(),2)),date:iso(new Date()),time:'16:00',notes:'',color:'#3869c8',done:false,created:Date.now()},
+{id:uid(),title:'化学の復習',minutes:30,priority:'medium',due:iso(addDays(new Date(),1)),date:null,time:null,notes:'苦手な計算問題を解き直す',color:'#d97732',done:false,created:Date.now()},
+{id:uid(),title:'英語の予習',minutes:20,priority:'low',due:iso(addDays(new Date(),1)),date:iso(new Date()),time:'18:00',notes:'',color:'#39915c',done:true,created:Date.now()}
+]}
+function uid(){return Math.random().toString(36).slice(2,10)}
+function load(){try{let op=JSON.parse(window.localStorage.getItem(OPERATION_KEY));operations=Array.isArray(op)?op:[];let v=JSON.parse(window.localStorage.getItem(KEY));tasks=Array.isArray(v)?v:[];let r=JSON.parse(window.localStorage.getItem(REWARD_KEY));rewardHistory=Array.isArray(r)?r:[];let ev=JSON.parse(window.localStorage.getItem(EVENT_KEY));eventHistory=Array.isArray(ev)?ev:[];let um=JSON.parse(window.localStorage.getItem(MISSION_KEY));unlockedMissions=Array.isArray(um)?um:[]}catch(e){tasks=[];rewardHistory=[];eventHistory=[];unlockedMissions=[]}save()}
+function saveRewards(){try{window.localStorage.setItem(REWARD_KEY,JSON.stringify(rewardHistory))}catch(e){/* keep current-session progress if storage is unavailable */}}
+function save(){try{window.localStorage.setItem(KEY,JSON.stringify(tasks));return true}catch(e){return false}}
+function saveOperations(){try{window.localStorage.setItem(OPERATION_KEY,JSON.stringify(operations))}catch(e){toast('保存できませんでした。ブラウザの保存設定を確認してください')}}
+function setTodoTab(tab){
+ todoTab=tab;
+ const tasksTab=document.getElementById('todo-tab-tasks'),opsTab=document.getElementById('todo-tab-operations');
+ tasksTab.classList.toggle('active',tab==='tasks');tasksTab.setAttribute('aria-selected',String(tab==='tasks'));
+ opsTab.classList.toggle('active',tab==='operations');opsTab.setAttribute('aria-selected',String(tab==='operations'));
+ document.getElementById('task-view').style.display=tab==='tasks'?'block':'none';
+ document.getElementById('operation-view').style.display=tab==='operations'?'block':'none';
+ document.getElementById('todo-add-button').textContent=tab==='tasks'?'＋ タスク追加':'＋ オペレーション追加';
+ document.getElementById('todo-add-button').onclick=tab==='tasks'?focusNewTask:focusNewOperation;
+ if(tab==='operations')renderOperations();
+}
+function focusNewOperation(){setTodoTab('operations');resetOperationForm();document.getElementById('operation-name').focus();document.getElementById('operation-form').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function updateOperationModeFields(){
+ const mode=document.getElementById('operation-mode').value;
+ document.getElementById('operation-linked-tasks-fields').style.display=mode==='tasks'?'block':'none';
+ document.getElementById('operation-result-fields').style.display=mode==='result'?'block':'none';
+ document.getElementById('operation-condition-fields').style.display=mode==='result'?'block':'none';
+}
+function updateOperationConditionFields(){
+ const type=document.getElementById('operation-condition-type').value;
+ document.getElementById('operation-number-fields').style.display=type==='number'?'block':'none';
+ document.getElementById('operation-text-fields').style.display=type==='text'?'block':'none';
+}
+function renderOperationTaskOptions(selected=[]){
+ const root=document.getElementById('operation-task-options');
+ const candidates=tasks;
+ if(!candidates.length){root.textContent='先にタスクを作成すると、ここで関連付けられます。';return}
+ root.innerHTML=candidates.map(t=>`<label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:7px 0"><input type="checkbox" class="operation-task-check" value="${escapeAttr(t.id)}" ${selected.includes(t.id)?'checked':''} style="width:auto"> <span>${escapeHtml(t.title)}${t.done?'（完了）':''}</span></label>`).join('');
+}
+function resetOperationForm(){
+ document.getElementById('operation-edit-id').value='';
+ document.getElementById('operation-form-title').textContent='新しいオペレーション';
+ ['operation-name','operation-deadline','operation-target','operation-unit','operation-text-condition','operation-notes','operation-actual'].forEach(id=>document.getElementById(id).value='');
+ document.getElementById('operation-mode').value='tasks';document.getElementById('operation-condition-type').value='number';document.getElementById('operation-comparator').value='gte';
+ updateOperationModeFields();updateOperationConditionFields();renderOperationTaskOptions([]);
+}
+function saveOperation(){
+ const id=document.getElementById('operation-edit-id').value;
+ const name=document.getElementById('operation-name').value.trim(),deadline=document.getElementById('operation-deadline').value;
+ if(!name||!deadline){toast('名称と期限を入力してください');return}
+ const mode=document.getElementById('operation-mode').value,type=document.getElementById('operation-condition-type').value;
+ const linkedTaskIds=[...document.querySelectorAll('.operation-task-check:checked')].map(e=>e.value);
+ const existing=operations.find(o=>o.id===id);
+ const op={id:id||uid(),name,deadline,mode,conditionType:type,target:type==='number'?(document.getElementById('operation-target').value===''?null:Number(document.getElementById('operation-target').value)):null,unit:document.getElementById('operation-unit').value.trim(),comparator:document.getElementById('operation-comparator').value,checklist:[],textCondition:document.getElementById('operation-text-condition').value.trim(),notes:document.getElementById('operation-notes').value.trim(),actual:document.getElementById('operation-actual').value===''?null:Number(document.getElementById('operation-actual').value),linkedTaskIds,created:existing?.created||Date.now(),updated:Date.now(),status:existing?.status||'active'};
+ if(mode==='tasks'&&!linkedTaskIds.length){toast('タスク連動型では、達成項目となる関連タスクを1件以上選んでください');return}
+ if(mode==='result'&&type==='number'&&op.target===null){toast('数値の目標値を入力してください');return}
+  if(type==='text'&&!op.textCondition){toast('達成条件を入力してください');return}
+ if(existing)operations=operations.map(x=>x.id===id?op:x);else operations.unshift(op);
+ saveOperations();resetOperationForm();renderOperations();toast(existing?'オペレーションを更新しました':'オペレーションを作成しました');
+}
+function startOperationDrag(e,id){dragId='operation:'+id;e.dataTransfer.setData('text/plain','operation:'+id);e.dataTransfer.effectAllowed='move'}
+function placeOperation(id,date,time){
+ const op=operations.find(x=>x.id===id);if(!op||op.mode!=='tasks')return;
+ op.date=date;op.time=time;op.duration=300;op.updated=Date.now();
+ saveOperations();renderOperations();renderCalendar();
+ toast(`「${op.name}」を ${fmt(parse(date))} ${time} に配置しました（5時間）`);
+}
+function handleCalendarDrop(e,date,time){
+ const payload=e.dataTransfer.getData('text/plain')||dragId;if(!payload)return;
+ if(payload.startsWith('operation:'))placeOperation(payload.slice(10),date,time);
+ else placeTask(payload,date,time);
+}
+function operationNumberConditionMet(op,value=op.actual){
+ if(value===null||value===undefined||op.target===null||op.target===undefined||!Number.isFinite(Number(value)))return false;
+ const actual=Number(value),target=Number(op.target);
+ if(op.comparator==='lte')return actual<=target;
+ if(op.comparator==='eq')return actual===target;
+ return actual>=target;
+}
+function operationProgress(op){
+ if(op.mode==='tasks'){
+  const linked=tasks.filter(t=>(op.linkedTaskIds||[]).includes(t.id));
+  return linked.length?Math.round(linked.filter(t=>t.done).length/linked.length*100):0;
+ }
+ if(op.conditionType==='number'&&op.actual!==null&&op.actual!==undefined&&op.target!==null){
+  return operationNumberConditionMet(op)?100:0;
+ }
+ return op.status==='achieved'?100:0;
+}
+function operationResultLabel(op){
+ if(op.conditionType==='number')return op.actual===null||op.actual===undefined?'実績未入力':`実績 ${op.actual}${op.unit||''} / 目標 ${op.target}${op.unit||''}`;
+  return op.textCondition||'自由記述の達成条件';
+}
+function completeOperationWithReward(op){
+ if(!op||op._rewardGranted)return;
+ op._rewardGranted=true;
+ const completedAt=op.achievedAt||Date.now();
+ op.achievedAt=completedAt;
+ // An operation is worth three stamp points. Keep three records so the existing stamp-card
+ // renderer and reward history naturally count the higher value.
+ for(let i=0;i<3;i++){
+  rewardHistory.unshift({id:uid(),operationId:op.id,title:`オペレーション：${op.name}`,completedAt,minutes:0,due:op.deadline||null,date:null,time:null,priority:'medium',color:null,created:op.created||null,notes:op.notes||'',stampPoints:1,stampSource:'operation'});
+ }
+ saveRewards();
+ saveOperations();
+ trackEvent('operation_completed',{operationId:op.id,operationName:op.name,stampPoints:3,completedAt});
+ const card=[...document.querySelectorAll('.operation-card')].find(el=>el.textContent.includes(op.name));
+ if(card){card.classList.add('bursting');}
+ setTimeout(()=>{
+  // Keep the operation visible through its achievement burst, then remove it.
+  operations=operations.filter(item=>item.id!==op.id);
+  saveOperations();
+  renderOperations();
+  const rewardBack=document.getElementById('reward-back');
+  if(rewardBack&&rewardBack.classList.contains('show'))pendingOperationRewards.push({id:op.id,name:op.name});
+  else showReward({title:`オペレーション達成：${op.name}`});
+ },760);
+}
+function renderOperations(){
+ const root=document.getElementById('operation-list');if(!root)return;
+ let autoChanged=false;
+ const today=iso(new Date());
+ operations.forEach(op=>{
+  if(op.status==='achieved'||op.status==='failed')return;
+  if(op.mode==='tasks'){
+   const ids=op.linkedTaskIds||[],existing=tasks.filter(t=>ids.includes(t.id));
+   if(ids.length>0&&(existing.length===0||existing.every(t=>t.done))){op.status='achieved';op.achievedAt=Date.now();autoChanged=true;completeOperationWithReward(op);return}
+  }
+  // 数値型は保存済み実績を先に判定し、条件を満たしていれば期限後でも達成を記録する。
+  if(op.mode==='result'&&op.conditionType==='number'&&operationNumberConditionMet(op)){op.status='achieved';op.achievedAt=op.achievedAt||Date.now();autoChanged=true;completeOperationWithReward(op);return}
+  // 日付単位の期限。期限日の翌日以降に未達成なら自動で未達成を確定する。
+  if(op.deadline&&op.deadline<today){op.status='failed';op.failedAt=Date.now();autoChanged=true;return}
+ });
+ if(autoChanged)saveOperations();
+ renderOperationTaskOptions(operations[0]?.linkedTaskIds||[]);
+ if(!operations.length){root.innerHTML='<div class="operation-empty">オペレーションはまだありません。<br>期限と達成条件を設定して、目標への挑戦を記録しましょう。</div>';return}
+ root.innerHTML=operations.map(op=>{
+  if(op.conditionType==='checklist')op.conditionType='text'; const pct=operationProgress(op),achieved=op.status==='achieved';
+  const status=achieved?'達成':(op.status==='failed'?'未達成':(op.deadline<iso(new Date())?'期限超過':'進行中'));
+  const modeLabel=op.mode==='tasks'?'タスク連動型':'結果入力型';
+  const condition=op.conditionType==='number'?`目標：${op.target??'未設定'}${escapeHtml(op.unit||'')}${op.comparator==='gte'?'以上':op.comparator==='lte'?'以下':'ちょうど'}`:'自由記述型';
+  return `<article class="operation-card" ${op.mode==='tasks'?'draggable="true" ondragstart="startOperationDrag(event,\''+op.id+'\')" ondragend="dragId=null"':''}><div style="display:flex;justify-content:space-between;gap:10px;align-items:start"><div><h3>${escapeHtml(op.name)}</h3><div class="operation-meta">期限：${escapeHtml(op.deadline)} · ${modeLabel} · ${condition}</div></div></div><section class="operation-achievement-field" aria-label="達成度" style="margin-top:12px;padding:12px;border:1px solid var(--line,#e1e5eb);border-radius:10px;background:var(--surface-soft,rgba(127,127,127,.04))"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="font-size:13px">達成度</strong><span class="pill">${status}</span></div><div class="operation-progress"><div style="width:${pct}%"></div></div><div class="operation-meta">${pct}% · ${escapeHtml(operationResultLabel(op))}</div>${op.mode==='result'&&op.conditionType==='number'&&op.status!=='failed'&&op.status!=='achieved'?`<div class="operation-actions" style="align-items:end"><label style="flex:1;min-width:120px;margin:0">実績を入力<input id="operation-actual-${op.id}" type="number" step="any" value="${op.actual===null||op.actual===undefined?'':escapeAttr(op.actual)}" placeholder="例：85" style="margin-top:5px"></label><button class="secondary" onclick="recordOperationActual('${op.id}')">実績を記録</button></div>`:''}${op.mode==='result'&&op.conditionType==='text'&&op.status!=='failed'?`<div class="operation-actions"><button class="secondary" onclick="finishOperation('${op.id}')">${achieved?'達成を解除':'達成として確定'}</button></div>`:''}</section>${op.mode==='tasks'?`<div style="margin-top:8px">${tasks.filter(t=>op.linkedTaskIds.includes(t.id)).map(t=>`<label style="display:flex;gap:8px;align-items:center;margin:7px 0;cursor:pointer"><input type="checkbox" style="width:auto;flex:0 0 auto" ${t.done?'checked':''} onchange="toggleOperationLinkedTask('${t.id}',this.checked)" onclick="event.stopPropagation()" ondragstart="event.preventDefault()"><span style="${t.done?'text-decoration:line-through;opacity:.65':''}">${escapeHtml(t.title)}</span></label>`).join('')}</div>`:''}${op.conditionType==='text'?`<div class="operation-meta">達成条件：${escapeHtml(op.textCondition)}</div>`:''}<div class="operation-meta">${escapeHtml(op.notes||'')}</div><div class="operation-actions"><button class="secondary" onclick="editOperation('${op.id}')">編集</button><button class="secondary" onclick="deleteOperation('${op.id}')">削除</button></div></article>`;
+ }).join('');
+}
+function editOperation(id){
+ const op=operations.find(x=>x.id===id);if(!op)return;
+ document.getElementById('operation-edit-id').value=id;document.getElementById('operation-form-title').textContent='オペレーションを編集';
+ document.getElementById('operation-name').value=op.name;document.getElementById('operation-deadline').value=op.deadline;document.getElementById('operation-mode').value=op.mode;document.getElementById('operation-condition-type').value=op.conditionType;document.getElementById('operation-target').value=op.target??'';document.getElementById('operation-unit').value=op.unit||'';document.getElementById('operation-comparator').value=op.comparator||'gte';document.getElementById('operation-text-condition').value=op.textCondition||'';document.getElementById('operation-notes').value=op.notes||'';document.getElementById('operation-actual').value=op.actual??'';
+ updateOperationModeFields();updateOperationConditionFields();renderOperationTaskOptions(op.linkedTaskIds||[]);document.getElementById('operation-form').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function recordOperationActual(id){
+ const op=operations.find(x=>x.id===id);if(!op||op.status==='failed')return;
+ const field=document.getElementById('operation-actual-'+id);if(!field)return;
+ const value=field.value;
+ if(value.trim()===''||!Number.isFinite(Number(value))){toast('実績の数値を入力してください');field.focus();return}
+ op.actual=Number(value);op.updated=Date.now();
+ if(operationNumberConditionMet(op)){const newlyAchieved=op.status!=='achieved';op.status='achieved';op.achievedAt=Date.now();delete op.failedAt;if(newlyAchieved)completeOperationWithReward(op);saveOperations();renderOperations();toast('達成条件を満たしたため、達成として記録しました')}
+ else{if(op.status==='achieved'){op.status='active';delete op.achievedAt}saveOperations();renderOperations();toast('実績を記録しました。達成条件は未達成です')}
+}
+function toggleOperationLinkedTask(taskId,checked){
+ const task=tasks.find(t=>t.id===taskId);if(!task)return;
+ if(!checked){
+  if(task.done)return;
+  task.done=false;task.updated=Date.now();delete task.completedAt;
+  trackEvent('task_reopened',{taskId:task.id});
+  save();renderTasks();renderCalendar();renderOperations();
+  toast('関連タスクを未完了に戻しました');
+  return;
+ }
+ if(task.done)return;
+ const completedTask={...task};
+ trackEvent('task_completion_started',{task:{...completedTask},source:'operation'});
+ const animated=burstCalendarItem(taskId);
+ const finish=()=>{
+  const index=tasks.findIndex(t=>t.id===taskId);
+  if(index<0)return;
+  const t={...tasks[index],completedAt:Date.now()};
+  tasks=tasks.filter(t=>t.id!==taskId);
+  rewardHistory.unshift({id:uid(),taskId:t.id,title:t.title,completedAt:t.completedAt,minutes:t.minutes||30,due:t.due||null,date:t.date||null,time:t.time||null,priority:t.priority||'medium',color:t.color||null,created:t.created||null,notes:t.notes||''});
+  trackEvent('task_completed',{task:{...t},completedAt:t.completedAt,source:'operation'});
+  if(!tasks.some(x=>!x.done))trackEvent('zero_open_tasks');
+  if(!tasks.some(x=>!x.done&&x.priority==='high'))trackEvent('zero_high_priority_tasks');
+  save();saveRewards();render();
+  showReward(t);
+ };
+ if(animated)setTimeout(finish,640);else finish();
+}function finishOperation(id){const op=operations.find(x=>x.id===id);if(!op||op.mode!=='result'||op.conditionType!=='text'||op.status==='failed')return;if(op.status==='achieved'){op.status='active';delete op.achievedAt;toast('達成状態を解除しました')}else{op.status='achieved';op.achievedAt=Date.now();delete op.failedAt;completeOperationWithReward(op);toast('オペレーション達成！')}saveOperations();renderOperations()}
+function deleteOperation(id){const op=operations.find(x=>x.id===id);if(!op)return;operations=operations.filter(x=>x.id!==id);saveOperations();renderOperations();renderCalendar();toast('オペレーションを削除しました')}
+function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function escapeAttr(value){return escapeHtml(value).replace(/`/g,'&#96;')}
+function toast(s){let e=document.getElementById('toast');e.textContent=s;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2300)}
+function setView(v){
+ if(v==='achievements'&&view!=='achievements')trackEvent('screen_opened',{screen:'achievements'});
+ if((v==='todo'||v==='calendar')&&!tasks.some(t=>!t.done))trackEvent('opened_with_no_tasks');
+ view=v;
+ document.getElementById('nav-todo').classList.toggle('active',v==='todo'||v==='calendar');
+ document.getElementById('nav-achievements').classList.toggle('active',v==='achievements');
+ const bottomTaskList=document.getElementById('bottom-task-list');
+ if(bottomTaskList)bottomTaskList.classList.toggle('active',v==='todo'||v==='calendar');
+ /* 下部ナビゲーションからアチーブメントへの直接リンクは削除済み。 */
+ const todo=document.getElementById('todo-panel'),calendar=document.getElementById('calendar-panel'),layout=document.querySelector('.layout'),ach=document.getElementById('achievement-panel');
+ if(v==='achievements'){layout.style.display='none';ach.style.display='block';setAchievementTab(achievementTab)}
+ else{
+  ach.style.display='none';
+  if(isMobileTaskFlow()){
+   layout.style.display='flex';
+   todo.style.display='block';
+   calendar.style.display='block';
+   applyResponsivePanelOrder();
+  }else{
+   layout.style.display='grid';
+   todo.style.display='block';
+   calendar.style.display='block';
+   applyResponsivePanelOrder();
+  }
+ }
+}
+function setFilter(f,b){filter=f;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x.dataset.filter===f));renderTasks()}
+
+let mobileAddSheetMode='task';
+let mobileAddSheetInitialized=false;
+function applyResponsivePanelOrder(){
+ const layout=document.querySelector('.layout');
+ const calendar=document.getElementById('calendar-panel');
+ const todo=document.getElementById('todo-panel');
+ if(!layout||!calendar||!todo)return;
+ if(isMobileTaskFlow()){
+  if(layout.firstElementChild!==calendar)layout.insertBefore(calendar,layout.firstElementChild);
+ }else{
+  if(layout.firstElementChild!==todo)layout.insertBefore(todo,layout.firstElementChild);
+ }
+}
+function isMobileTaskFlow(){return window.matchMedia('(max-width: 760px)').matches;}
+function moveMobileAddForms(){
+ const quick=document.getElementById('quick-add'), opForm=document.getElementById('operation-form');
+ const quickHome=document.getElementById('quick-add-home'), opHome=document.getElementById('operation-form-home');
+ const taskSlot=document.getElementById('mobile-add-task-slot'), opSlot=document.getElementById('mobile-add-operation-slot');
+ if(!quick||!opForm||!quickHome||!opHome||!taskSlot||!opSlot)return;
+ if(isMobileTaskFlow()){
+  if(quick.parentElement!==taskSlot)taskSlot.appendChild(quick);
+  if(opForm.parentElement!==opSlot)opSlot.appendChild(opForm);
+ }else{
+  if(quick.parentElement!==quickHome)quickHome.parentElement.insertBefore(quick,quickHome.nextSibling);
+  if(opForm.parentElement!==opHome)opHome.parentElement.insertBefore(opForm,opHome.nextSibling);
+  closeMobileAddSheet();
+ }
+ mobileAddSheetInitialized=true;
+}
+function openMobileAddSheet(mode='task'){
+ if(!isMobileTaskFlow()){
+  if(mode==='operation'){setView('todo');setTodoTab('operations');document.getElementById('operation-name')?.focus();}
+  else {setView('todo');setTodoTab('tasks');document.getElementById('new-title')?.focus();document.getElementById('quick-add')?.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  return;
+ }
+ moveMobileAddForms();
+ const backdrop=document.getElementById('mobile-add-backdrop');
+ if(!backdrop)return;
+ switchMobileAddSheet(mode,false);
+ backdrop.classList.add('open');backdrop.setAttribute('aria-hidden','false');document.body.classList.add('mobile-sheet-open');
+ setTimeout(()=>{const target=mode==='operation'?'operation-name':'new-title';document.getElementById(target)?.focus({preventScroll:true});},260);
+}
+function switchMobileAddSheet(mode='task',focus=true){
+ mobileAddSheetMode=mode==='operation'?'operation':'task';
+ const taskSlot=document.getElementById('mobile-add-task-slot'),opSlot=document.getElementById('mobile-add-operation-slot');
+ const taskTab=document.getElementById('mobile-add-tab-task'),opTab=document.getElementById('mobile-add-tab-operation');
+ const title=document.getElementById('mobile-add-title');
+ if(taskSlot)taskSlot.hidden=mobileAddSheetMode!=='task';
+ if(opSlot)opSlot.hidden=mobileAddSheetMode!=='operation';
+ if(taskTab){taskTab.classList.toggle('active',mobileAddSheetMode==='task');taskTab.setAttribute('aria-selected',String(mobileAddSheetMode==='task'));}
+ if(opTab){opTab.classList.toggle('active',mobileAddSheetMode==='operation');opTab.setAttribute('aria-selected',String(mobileAddSheetMode==='operation'));}
+ if(title)title.textContent=mobileAddSheetMode==='task'?'タスクを追加':'オペレーションを追加';
+ if(mobileAddSheetMode==='operation')setTodoTab('operations');else setTodoTab('tasks');
+ if(focus){const id=mobileAddSheetMode==='operation'?'operation-name':'new-title';setTimeout(()=>document.getElementById(id)?.focus({preventScroll:true}),80);}
+}
+function closeMobileAddSheet(){
+ const backdrop=document.getElementById('mobile-add-backdrop');
+ if(backdrop){backdrop.classList.remove('open');backdrop.setAttribute('aria-hidden','true');}
+ document.body.classList.remove('mobile-sheet-open');
+}
+
+let pendingCalendarTaskId=null;
+function openTaskListSheet(){
+ const backdrop=document.getElementById('mobile-tasklist-backdrop');
+ if(!backdrop)return;
+ renderMobileTaskList();
+ backdrop.classList.add('open');
+ backdrop.setAttribute('aria-hidden','false');
+ document.body.classList.add('mobile-sheet-open');
+}
+function closeTaskListSheet(){
+ const backdrop=document.getElementById('mobile-tasklist-backdrop');
+ if(backdrop){backdrop.classList.remove('open');backdrop.setAttribute('aria-hidden','true');}
+ document.body.classList.remove('mobile-sheet-open');
+}
+function renderMobileTaskList(){
+ const root=document.getElementById('mobile-tasklist-items');
+ if(!root)return;
+ root.innerHTML='';
+ const list=[...tasks].sort((a,b)=>(a.done?1:0)-(b.done?1:0)||(b.created||0)-(a.created||0));
+ if(!list.length){const empty=document.createElement('div');empty.className='mobile-tasklist-empty';empty.textContent='登録済みのタスクはまだありません。';root.append(empty);return;}
+ list.forEach(t=>{
+  const row=document.createElement('div');row.className='mobile-tasklist-item';
+  const info=document.createElement('div');info.className='mobile-tasklist-info';
+  const name=document.createElement('div');name.className='mobile-tasklist-name';name.textContent=t.title;
+  const meta=document.createElement('div');meta.className='mobile-tasklist-meta';meta.textContent=(t.done?'完了':(t.date?`予定あり：${t.date} ${t.time||''}`:'未配置'))+` · ${t.minutes||30}分`;
+  info.append(name,meta);row.append(info);
+  if(!t.done){
+   const place=document.createElement('button');place.type='button';place.className='mobile-tasklist-place';place.textContent='カレンダーに追加';
+   place.addEventListener('click',()=>beginCalendarPlacement(t.id));row.append(place);
+  }
+  root.append(row);
+ });
+}
+function beginCalendarPlacement(taskId){
+ const task=tasks.find(t=>t.id===taskId);
+ if(!task||task.done){toast('未完了のタスクを選んでください');return;}
+ pendingCalendarTaskId=taskId;
+ closeTaskListSheet();
+ setView('calendar');
+ const banner=document.getElementById('calendar-placement-hint');
+ if(banner){banner.textContent=`「${task.title}」を配置します。カレンダーの日時をタップしてください。`;banner.classList.add('show');}
+ toast('カレンダーの配置先をタップしてください');
+ const panel=document.getElementById('calendar-panel');
+ if(panel)panel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function showTaskList(){
+ if(isMobileTaskFlow()){openTaskListSheet();return;}
+ setView('todo');setTodoTab('tasks');
+ const panel=document.getElementById('todo-panel');
+ if(panel)panel.scrollIntoView({behavior:'smooth',block:'start'});
+ const btn=document.getElementById('bottom-task-list');if(btn)btn.classList.add('active');
+}
+function focusNewTask(){if(isMobileTaskFlow()){openMobileAddSheet('task');return}setView('todo');setTodoTab('tasks');document.getElementById('new-title').focus();document.getElementById('quick-add').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function addTask(){
+ const titleInput=document.getElementById('new-title');
+ const dueInput=document.getElementById('new-due');
+ const title=titleInput.value.trim();
+ if(!title){toast('タスク名を入力してください');titleInput.focus();return false}
+ const mins=Number(document.getElementById('new-minutes').value)||30;
+ const createdTask={id:uid(),title,minutes:Math.max(5,mins),priority:document.getElementById('new-priority').value,due:dueInput.value||null,date:null,time:null,notes:'',color:document.getElementById('new-color').value||'#3869c8',done:false,created:Date.now()};
+ tasks.unshift(createdTask);
+ if(!save()){
+  tasks=tasks.filter(t=>t.id!==createdTask.id);
+  toast('保存できませんでした。ブラウザの保存設定や空き容量を確認してください');
+  return false;
+ }
+ try{trackEvent('task_created',{task:{...createdTask}})}catch(e){}
+ titleInput.value='';
+ dueInput.value='';
+ try{render()}catch(e){console.error('TaskFlow render error:',e)}
+ toast('タスクを保存しました');
+ closeMobileAddSheet();
+ return true;
+}
+function renderTasks(){
+ let q=document.getElementById('search').value.toLowerCase();
+ let list=tasks.filter(t=>(t.title+' '+(t.notes||'')).toLowerCase().includes(q));
+ if(filter==='unscheduled')list=list.filter(t=>!t.date&&!t.done);
+ if(filter==='open')list=list.filter(t=>!t.done);
+ if(filter==='done')list=list.filter(t=>t.done);
+ const today=iso(new Date());
+ // "今日すること" includes tasks scheduled for today and unscheduled tasks with today's due date.
+ // Other tasks, including unplanned tasks with no due date, remain in "今後すること".
+ const isToday=t=>!t.done&&(t.date===today||t.due===today);
+ const todayTasks=list.filter(isToday);
+ const futureTasks=list.filter(t=>!isToday(t));
+ const renderGroup=(rootId,items,section)=>{
+   let root=document.getElementById(rootId);root.innerHTML='';
+   root.ondragover=e=>{e.preventDefault();root.classList.add('over')};
+   root.ondragleave=e=>{if(!root.contains(e.relatedTarget))root.classList.remove('over')};
+   root.ondrop=e=>{e.preventDefault();root.classList.remove('over');let id=e.dataTransfer.getData('text/plain')||dragId;let t=tasks.find(x=>x.id===id);if(!t)return;if(section==='today'){if(!t.date){t.date=today;t.time='16:00'}else if(t.date!==today){t.date=today}}else if(t.date===today){t.date=null;t.time=null}save();render();toast(section==='today'?'「今日すること」に移動しました':'「今後すること」に移動しました')};
+   if(!items.length){let empty=document.createElement('div');empty.className='section-empty';empty.textContent=section==='today'?'今日のタスクはありません':'今後のタスクはありません';root.append(empty);return}
+   items.forEach(t=>{
+     let el=document.createElement('div');el.className='task'+(t.done?' done':'');el.draggable=true;el.dataset.id=t.id;
+     el.addEventListener('dragstart',e=>{dragId=t.id;e.dataTransfer.setData('text/plain',t.id);e.dataTransfer.effectAllowed='move'});
+     el.addEventListener('dragend',()=>{dragId=null;document.querySelectorAll('.section-drop').forEach(x=>x.classList.remove('over'))});
+     let cb=document.createElement('input');cb.type='checkbox';cb.className='check';cb.checked=t.done;cb.setAttribute('aria-label','完了');cb.onchange=()=>{if(cb.checked){completeTaskWithBurst(t.id)}else{t.done=false;save();render()}};
+     let main=document.createElement('div');main.className='task-main';let title=document.createElement('div');title.className='task-title';title.textContent=t.title;
+     let meta=document.createElement('div');meta.className='meta';meta.textContent=`${t.minutes||30}分 · 締切 ${t.due?fmt(parse(t.due)):'なし'}`;
+     let tag=document.createElement('span');tag.className='tag '+(t.priority==='high'?'high':'');tag.textContent=t.priority==='high'?'優先度 高':t.priority==='low'?'優先度 低':'優先度 中';
+     let tag2=document.createElement('span');tag2.className='tag '+(t.date?'scheduled':'');tag2.textContent=t.done?'完了':t.date?`${fmt(parse(t.date))} ${t.time||''}`:'未配置';
+     main.append(title,meta,tag,document.createTextNode(' '),tag2);
+     let actions=document.createElement('div');actions.className='task-actions';
+     let place=document.createElement('button');place.className='iconbtn';place.title='配置';place.textContent='▦';place.onclick=()=>openModal(t.id,true);
+     let edit=document.createElement('button');edit.className='iconbtn';edit.title='編集';edit.textContent='✎';edit.onclick=()=>openModal(t.id,false);
+     actions.append(place,edit);el.append(cb,main,actions);root.append(el)
+   })
+ };
+ renderGroup('today-list',todayTasks,'today');
+ renderGroup('future-list',futureTasks,'future');
+ document.getElementById('today-count').textContent=`${todayTasks.length}件`;
+ document.getElementById('future-count').textContent=`${futureTasks.length}件`;
+}
+
+function minutesToClock(total){
+ total=((total%1440)+1440)%1440;
+ return `${pad(Math.floor(total/60))}:${pad(total%60)}`;
+}
+function burstCalendarItem(taskId){
+ // Animate the calendar block and the matching To Do card together when both are visible.
+ const nodes=[...document.querySelectorAll('.event,.month-event,.task')].filter(el=>
+   (el.dataset.taskId===taskId||el.dataset.id===taskId)&&el.offsetParent!==null
+ );
+ if(!nodes.length)return false;
+ const color=(tasks.find(t=>t.id===taskId)||{}).color||'#3869c8';
+ nodes.forEach(node=>{
+   node.classList.add('bursting');
+   const parent=node.parentElement;
+   if(parent){
+     for(let i=0;i<12;i++){
+       const p=document.createElement('i');p.className='burst-particle';
+       const angle=(Math.PI*2*i)/12,dist=24+(i%3)*10;
+       p.style.setProperty('--dx',`${Math.cos(angle)*dist}px`);
+       p.style.setProperty('--dy',`${Math.sin(angle)*dist}px`);
+       p.style.setProperty('--particle-color',color);
+       p.style.left=`${node.offsetLeft+node.offsetWidth/2}px`;
+       p.style.top=`${node.offsetTop+node.offsetHeight/2}px`;
+       parent.append(p);setTimeout(()=>p.remove(),700);
+     }
+   }
+ });
+ return true;
+}
+function showReward(task){
+ const stamp=document.getElementById('reward-stamp');
+ document.getElementById('reward-task').textContent=task.title;
+ document.getElementById('reward-title').textContent=rewardHistory.length%5===0?'すばらしい達成！':'やり遂げたね！';
+ stamp.textContent=rewardHistory.length%5===0?'🏅':'★';
+ document.getElementById('reward-message').innerHTML=rewardHistory.length%5===0?'大きな節目だね！<br>ここまで積み重ねた自分を、ちゃんと認めてあげよう。':'ひとつ、ちゃんと前に進めたね。<br>その積み重ねは、きちんとあなたのもの。';
+ const board=document.getElementById('stamp-board');board.innerHTML='';
+ const count=rewardHistory.length;
+ const filled=count%10===0&&count>0?10:count%10;
+ for(let i=0;i<10;i++){
+   const cell=document.createElement('div');cell.className='stamp-cell'+(i<filled?' filled':'');
+   if(i===filled-1){cell.classList.add('new-stamp')}
+   cell.textContent=i<filled?'★':'·';board.append(cell);
+ }
+ document.getElementById('reward-count').textContent=`達成スタンプ ${count} 個 · ${Math.floor(Math.max(0,count-1)/10)+1} 枚目のカード`;
+ document.getElementById('reward-back').classList.add('show');
+}
+let pendingOperationRewards=[];
+function closeReward(){
+ document.getElementById('reward-back').classList.remove('show');
+ if(pendingOperationRewards.length){
+  const next=pendingOperationRewards.shift();
+  setTimeout(()=>showReward({title:`オペレーション達成：${next.name}`}),220);
+ }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeReward()});
+function completeTaskWithBurst(taskId){
+ const index=tasks.findIndex(x=>x.id===taskId);if(index<0||tasks[index].done)return;
+ const t={...tasks[index]};
+ trackEvent('task_completion_started',{task:{...t}});
+ const animated=burstCalendarItem(taskId);
+ const finish=()=>{
+   tasks=tasks.filter(x=>x.id!==taskId); // completed task is removed from calendar and active task lists
+   t.completedAt=Date.now();
+   rewardHistory.unshift({id:uid(),taskId:t.id,title:t.title,completedAt:t.completedAt,minutes:t.minutes||30,due:t.due||null,date:t.date||null,time:t.time||null,priority:t.priority||'medium',color:t.color||null,created:t.created||null,notes:t.notes||''});
+   trackEvent('task_completed',{task:{...t},completedAt:t.completedAt});
+   if(!tasks.some(x=>!x.done))trackEvent('zero_open_tasks');
+   if(!tasks.some(x=>!x.done&&x.priority==='high'))trackEvent('zero_high_priority_tasks');
+   save();saveRewards();render();showReward(t);
+ };
+ if(animated){setTimeout(finish,640)}else{finish()}
+}
+function renderCalendar(){
+ let cal=document.getElementById('calendar'),mode=document.getElementById('view-mode').value;
+ cal.innerHTML='';cal.classList.toggle('month-mode',mode==='month');
+ if(mode==='month'){
+   let base=new Date(weekStart.getFullYear(),weekStart.getMonth(),1,12);
+   document.getElementById('week-title').textContent=`${base.getFullYear()}年${base.getMonth()+1}月`;
+   ['月','火','水','木','金','土','日'].forEach(d=>{let h=document.createElement('div');h.className='calhead';h.textContent=d;cal.append(h)});
+   let first=monday(base),today=iso(new Date());
+   for(let i=0;i<42;i++){
+     let d=addDays(first,i),date=iso(d),cell=document.createElement('div');cell.className='month-cell'+(d.getMonth()!==base.getMonth()?' muted':'');cell.dataset.date=date;
+     let num=document.createElement('div');num.className='month-num';num.textContent=d.getDate();cell.append(num);
+     cell.addEventListener('click',e=>{if(e.target.closest('.month-event'))return;openPlacementAt(date,'16:00')});
+     cell.addEventListener('dragover',e=>{e.preventDefault();cell.classList.add('over')});
+     cell.addEventListener('dragleave',()=>cell.classList.remove('over'));
+     cell.addEventListener('drop',e=>{e.preventDefault();cell.classList.remove('over');handleCalendarDrop(e,date,'16:00')});
+     let dayTasks=tasks.filter(t=>t.date===date&&!t.done).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+     dayTasks.slice(0,4).forEach(t=>{let ev=document.createElement('button');ev.className='month-event'+(t.done?' done':'');ev.dataset.taskId=t.id;ev.style.background=tint(t.color||'#3869c8');ev.style.color=contrastText(t.color||'#3869c8');ev.style.borderLeftColor=t.color||'#3869c8';ev.textContent=(t.time?t.time+' ':'')+t.title;ev.title=`${t.title} · ${t.time||'時刻未設定'} · ${t.minutes||30}分`;ev.draggable=true;ev.addEventListener('dragstart',e=>{dragId=t.id;e.dataTransfer.setData('text/plain',t.id);e.dataTransfer.effectAllowed='move'});ev.addEventListener('click',e=>{e.stopPropagation();openModal(t.id,false)});cell.append(ev)});
+     const dayOps=operations.filter(o=>o.mode==='tasks'&&o.date===date).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+     dayOps.slice(0,3).forEach(o=>{let ev=document.createElement('button');ev.className='month-event';ev.style.background='rgba(112,86,190,.16)';ev.style.color='#4c367e';ev.style.borderLeftColor='#7056be';ev.textContent=(o.time?o.time+' ':'')+'◎ '+o.name;ev.title=`${o.name} · 5時間`;ev.draggable=true;ev.addEventListener('dragstart',e=>startOperationDrag(e,o.id));ev.addEventListener('click',e=>{e.stopPropagation();setTodoTab('operations');editOperation(o.id)});cell.append(ev)});
+     if(dayTasks.length+dayOps.length>4){let more=document.createElement('div');more.className='sub';more.textContent=`ほか ${dayTasks.length+dayOps.length-4} 件`;cell.append(more)}
+     cal.append(cell)
+   }
+   checkOverlaps();renderStats();return;
+ }
+ let days=[];
+ if(mode==='day'){days=[new Date(weekStart.getFullYear(),weekStart.getMonth(),weekStart.getDate(),12)]}
+ else{for(let i=0;i<7;i++)days.push(addDays(weekStart,i))}
+ let first=days[0],last=days[days.length-1];
+ document.getElementById('week-title').textContent=mode==='day'?`${first.getFullYear()}年${fmt(first)}（${weekdays[first.getDay()]}）`:`${first.getFullYear()}年 ${fmt(first)}（${weekdays[first.getDay()]}） – ${fmt(last)}（${weekdays[last.getDay()]}）`;
+ let blank=document.createElement('div');blank.className='calhead';blank.textContent='時間';cal.append(blank);
+ days.forEach(d=>{let h=document.createElement('div');h.className='calhead'+(iso(d)===iso(new Date())?' today':'');h.textContent=`${weekdays[d.getDay()]} ${d.getDate()}`;cal.append(h)});
+ for(let hour=0;hour<=23;hour++){
+   let lab=document.createElement('div');lab.className='time-label';lab.textContent=`${pad(hour)}:00`;cal.append(lab);
+   days.forEach(d=>{
+     let slot=document.createElement('div');slot.className='slot';slot.dataset.date=iso(d);slot.dataset.hour=hour;slot.title=`${iso(d)} ${pad(hour)}:00 に配置`;
+     slot.addEventListener('click',()=>{if(dragId)return;openPlacementAt(iso(d),`${pad(hour)}:00`)});
+     slot.addEventListener('dragover',e=>{e.preventDefault();slot.classList.add('over')});slot.addEventListener('dragleave',()=>slot.classList.remove('over'));
+     slot.addEventListener('drop',e=>{e.preventDefault();slot.classList.remove('over');handleCalendarDrop(e,iso(d),`${pad(hour)}:00`)});
+     let found=tasks.filter(t=>!t.done&&t.date===iso(d)&&t.time&&Number(t.time.slice(0,2))===hour);
+     found.forEach(t=>{let ev=document.createElement('div');ev.className='event'+(t.done?' done':'');ev.dataset.taskId=t.id;ev.style.setProperty('--duration',Math.max(5,Number(t.minutes)||30));ev.style.height=`${Math.max(5,Number(t.minutes)||30)*62/60-6}px`;ev.style.top=`${3+(Number(t.time.slice(3,5))/60)*62}px`;ev.title=`${t.title} · ${t.time}–${minutesToClock(Number(t.time.slice(0,2))*60+Number(t.time.slice(3,5))+(Number(t.minutes)||30))} (${t.minutes||30}分)`;let c=t.color||'#3869c8';ev.style.background=tint(c);ev.style.color=contrastText(c);ev.style.borderLeftColor=c;ev.draggable=true;ev.addEventListener('dragstart',e=>{dragId=t.id;e.dataTransfer.setData('text/plain',t.id);e.dataTransfer.effectAllowed='move'});ev.addEventListener('click',e=>{e.stopPropagation();openModal(t.id,false)});let strong=document.createElement('strong');strong.textContent=t.title;let span=document.createElement('span');span.textContent=`${t.time} · ${t.minutes}分`;ev.append(strong,span);slot.append(ev)});
+     const slotOps=operations.filter(o=>o.mode==='tasks'&&o.date===iso(d)&&o.time&&Number(o.time.slice(0,2))===hour);
+     slotOps.forEach(o=>{let ev=document.createElement('div');ev.className='event operation-event';ev.dataset.operationId=o.id;ev.style.height=`${300*62/60-6}px`;ev.style.top=`${3+(Number(o.time.slice(3,5))/60)*62}px`;ev.style.background='rgba(112,86,190,.16)';ev.style.color='#4c367e';ev.style.borderLeftColor='#7056be';ev.draggable=true;ev.title=`${o.name} · ${o.time}–${minutesToClock(Number(o.time.slice(0,2))*60+Number(o.time.slice(3,5))+300)}（5時間）`;ev.addEventListener('dragstart',e=>startOperationDrag(e,o.id));ev.addEventListener('click',e=>{e.stopPropagation();setTodoTab('operations');editOperation(o.id)});let strong=document.createElement('strong');strong.textContent='◎ '+o.name;let span=document.createElement('span');span.textContent=`${o.time} · 5時間`;ev.append(strong,span);slot.append(ev)});
+     cal.append(slot)
+   })
+ }
+ checkOverlaps();renderStats()
+}
+function tint(hex){let h=String(hex||'#3869c8').replace('#','');if(h.length!==6)return '#e8efff';let r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return `rgba(${r},${g},${b},0.16)`}
+function contrastText(hex){return '#253248'}
+function checkOverlaps(){let overlaps=[];let scheduled=tasks.filter(t=>t.date&&t.time&&!t.done);for(let i=0;i<scheduled.length;i++)for(let j=i+1;j<scheduled.length;j++){let a=scheduled[i],b=scheduled[j];if(a.date!==b.date)continue;let start=t=>Number(t.time.slice(0,2))*60+Number(t.time.slice(3,5));if(start(a)<start(b)+(b.minutes||30)&&start(b)<start(a)+(a.minutes||30))overlaps.push(`${a.title} と ${b.title}`)}let n=document.getElementById('overlap-notice');if(overlaps.length){n.textContent='予定時間が重なっています：'+[...new Set(overlaps)].join('、');n.classList.add('show')}else{n.textContent='';n.classList.remove('show')}}
+
+let achievementTab='stamps';
+function setAchievementTab(tab){trackEvent('achievement_tab_opened',{tab});
+ const allowed=['stamps','progress','records','stickers'];
+ if(!allowed.includes(tab))tab='stamps';
+ achievementTab=tab;
+ document.querySelectorAll('[data-achievement-tab]').forEach(button=>button.classList.toggle('active',button.dataset.achievementTab===tab));
+ allowed.forEach(name=>{const page=document.getElementById('achievement-page-'+name);if(page)page.style.display=name===tab?'block':'none'});
+ renderAchievements();
+}
+let progressPeriod='month';
+function setProgressPeriod(period){
+ progressPeriod=period==='all'?'all':'month';
+ document.getElementById('progress-period-month').classList.toggle('active',progressPeriod==='month');
+ document.getElementById('progress-period-all').classList.toggle('active',progressPeriod==='all');
+ renderDeadlineProgress();
+}
+function renderDeadlineProgress(){
+ const now=new Date();now.setHours(23,59,59,999);
+ const monthStart=new Date(now.getFullYear(),now.getMonth(),1);monthStart.setHours(0,0,0,0);
+ const allItems=[];
+ rewardHistory.forEach(item=>{if(item.due)allItems.push({due:item.due,completedAt:Number(item.completedAt)||0,completed:true,title:item.title})});
+ tasks.forEach(item=>{if(item.due)allItems.push({due:item.due,completedAt:0,completed:false,title:item.title})});
+ const eligible=allItems.filter(item=>{
+  const dueDate=parse(item.due);dueDate.setHours(23,59,59,999);
+  if(dueDate>now)return false;
+  return progressPeriod==='all'||(dueDate>=monthStart&&dueDate<=now);
+ });
+ const onTime=eligible.filter(item=>item.completed&&item.completedAt>0&&item.completedAt<=new Date(item.due+'T23:59:59').getTime()).length;
+ const total=eligible.length,rate=total?Math.round(onTime/total*100):null;
+ document.getElementById('deadline-rate-period').textContent=progressPeriod==='month'?'今月の期限内達成率':'全期間の期限内達成率';
+ document.getElementById('deadline-rate-value').textContent=rate===null?'—':rate;
+ document.getElementById('deadline-rate-ring-label').textContent=rate===null?'—%':rate+'%';
+ document.getElementById('deadline-rate-ring').style.setProperty('--rate',rate===null?0:rate);
+ document.getElementById('deadline-rate-detail').textContent=total?`${onTime} / ${total} 件を期限内に完了`:'集計できる締切済みタスクはまだありません。';
+ const chart=document.getElementById('deadline-chart');chart.innerHTML='';
+ const bins=[];
+ if(progressPeriod==='month'){
+  // Rolling 30-day window: the rightmost point is today, and older days shift left.
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  for(let offset=29;offset>=0;offset--){
+   const date=new Date(today);date.setDate(today.getDate()-offset);
+   const key=`${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+   const items=allItems.filter(x=>x.due===key);
+   const dueDateEnd=new Date(key+'T23:59:59').getTime();
+   const isPastOrToday=date<=today;
+   const matured=items.filter(x=>x.completed || dueDateEnd<=Date.now());
+   const good=matured.filter(x=>x.completed&&x.completedAt>0&&x.completedAt<=dueDateEnd).length;
+   bins.push({label:`${date.getMonth()+1}/${date.getDate()}`,shortLabel:String(date.getDate()),rate:matured.length?Math.round(good/matured.length*100):null,count:matured.length,key,isToday:offset===0});
+  }
+  document.getElementById('deadline-chart-caption').textContent='直近30日間（日ごと）';
+ }else{
+  const monthKeys=[...new Set(eligible.map(x=>x.due.slice(0,7)))].sort();
+  monthKeys.forEach(key=>{
+   const items=eligible.filter(x=>x.due.startsWith(key));
+   const good=items.filter(x=>x.completed&&x.completedAt>0&&x.completedAt<=new Date(x.due+'T23:59:59').getTime()).length;
+   bins.push({label:key.slice(2).replace('-','/'),rate:items.length?Math.round(good/items.length*100):null,count:items.length});
+  });
+  document.getElementById('deadline-chart-caption').textContent='月ごとの達成率';
+ }
+ const periodItems=rewardHistory.filter(item=>{
+  const d=new Date(Number(item.completedAt)||0);
+  return progressPeriod==='all'||(d>=monthStart&&d<=now);
+ });
+ document.getElementById('period-task-label').textContent=progressPeriod==='month'?'今月':'全期間';
+ document.getElementById('period-best-label').textContent=progressPeriod==='month'?'過去最高（1ヶ月）':'過去最高（全期間）';
+ document.getElementById('period-task-count').textContent=periodItems.length;
+ let best=0;
+ if(progressPeriod==='month'){
+  const monthCounts={};
+  rewardHistory.forEach(item=>{const d=new Date(Number(item.completedAt)||0);const key=`${d.getFullYear()}-${pad(d.getMonth()+1)}`;monthCounts[key]=(monthCounts[key]||0)+1});
+  best=Math.max(0,...Object.values(monthCounts));
+ }else{best=rewardHistory.length}
+ document.getElementById('period-task-best').textContent=best;
+ document.getElementById('period-task-best-note').textContent=progressPeriod==='month'?'履歴にある月ごとの完了数の最高値':'これまでに完了したタスクの合計';
+ const evalTitle=document.getElementById('evaluation-title'),evalDesc=document.getElementById('evaluation-description'),evalIcon=document.getElementById('evaluation-icon');
+ if(rate===null){evalIcon.textContent='📝';evalTitle.textContent='今の状況を振り返る';evalDesc.textContent='締切を迎えたタスクの記録が集まると、ここに期間の状況に合わせた振り返りが表示されます。'}
+ else {
+  evalIcon.textContent='📝';
+  const completedRatio=periodItems.length?Math.round(periodItems.length/Math.max(1,progressPeriod==='month'?new Date(now.getFullYear(),now.getMonth()+1,0).getDate():new Set(rewardHistory.map(item=>{const d=new Date(Number(item.completedAt)||0);return `${d.getFullYear()}-${pad(d.getMonth()+1)}`})).size)*10):0;
+  const late=eligible.filter(item=>!item.completed||!item.completedAt||item.completedAt>new Date(item.due+'T23:59:59').getTime()).length;
+  const monthWord=progressPeriod==='month'?'今月':'これまで';
+  let reflection='';
+  if(rate>=90)reflection=`${monthWord}は期限内に完了できたタスクが多く、計画どおりに進められた期間だったようです。うまくいった進め方を、次の期間にも活かせそうです。`;
+  else if(rate>=70)reflection=`${monthWord}は期限内に完了できたタスクが多めでした。予定が合わなかったタスクも振り返りながら、今のペースを整えていきましょう。`;
+  else if(rate>=40)reflection=`${monthWord}は期限に間に合わなかったタスクも見られます。タスクの量や見積もり時間、締切の置き方を見直すと、次の計画を立てやすくなりそうです。`;
+  else reflection=`${monthWord}は期限内に完了できなかったタスクが多い結果でした。忙しさや予定の立て方が影響していた可能性もあります。まずは優先順位を整理し、無理のない計画に調整してみましょう。`;
+  evalTitle.textContent=`${monthWord}の振り返り`;
+  evalDesc.textContent=`期限内達成率は${rate}%。期限内に完了したタスクは${onTime}件、集計対象は${total}件です。${reflection}`;
+ }
+ if(!bins.some(b=>b.count)){const empty=document.createElement('div');empty.className='deadline-chart-empty';empty.textContent=progressPeriod==='month'?'直近30日間に、集計できる締切済みタスクはまだありません。':'期限の記録が増えると、ここに推移が表示されます。';chart.append(empty);return}
+ // Graph-paper-style line chart with a fixed 0–100% vertical axis.
+ const n=bins.length;
+ const plotW=Math.max(560,n*28),plotH=280,left=48,right=14,top=14,bottom=36;
+ const innerW=plotW-left-right,innerH=plotH-top-bottom;
+ const svgNS='http://www.w3.org/2000/svg';
+ const svg=document.createElementNS(svgNS,'svg');
+ svg.setAttribute('class','deadline-plot-svg');svg.setAttribute('viewBox',`0 0 ${plotW} ${plotH}`);svg.setAttribute('role','img');
+ svg.setAttribute('aria-label',progressPeriod==='month'?'日ごとの期限内達成率の折れ線グラフ':'月ごとの期限内達成率の折れ線グラフ');
+ const add=(tag,attrs,textValue)=>{const el=document.createElementNS(svgNS,tag);Object.entries(attrs||{}).forEach(([k,v])=>el.setAttribute(k,String(v)));if(textValue!==undefined)el.textContent=textValue;svg.append(el);return el};
+ // Horizontal grid and percentage labels.
+ for(let pct=0;pct<=100;pct+=10){
+  const y=top+innerH*(1-pct/100);
+  add('line',{x1:left,y1:y,x2:plotW-right,y2:y,class:`plot-grid${pct%20===0?' major':''}`});
+  if(pct%20===0)add('text',{x:left-8,y:y+4,'text-anchor':'end'},pct+'%');
+ }
+ // Vertical grid, with fewer labels on dense daily charts.
+ bins.forEach((bin,i)=>{
+  const x=left+(n===1?innerW/2:innerW*i/(n-1));
+  add('line',{x1:x,y1:top,x2:x,y2:top+innerH,class:'plot-grid'});
+  const showLabel=progressPeriod==='all'||i===0||i===n-1||i%5===0;
+  if(showLabel)add('text',{x,y:top+innerH+19,'text-anchor':'middle'},progressPeriod==='month'?(bin.isToday?'今日':bin.shortLabel):bin.label);
+ });
+ add('line',{x1:left,y1:top,x2:left,y2:top+innerH,class:'plot-axis'});
+ add('line',{x1:left,y1:top+innerH,x2:plotW-right,y2:top+innerH,class:'plot-axis'});
+ // Leave gaps for dates/months with no eligible tasks instead of inventing a value.
+ let segment=[];
+ const drawSegment=()=>{
+  if(!segment.length)return;
+  if(segment.length>1){
+   const d=segment.map((point,j)=>`${j?'L':'M'} ${point.x} ${point.y}`).join(' ');
+   add('path',{d,class:'plot-line'});
+  }
+  segment.forEach(point=>add('circle',{cx:point.x,cy:point.y,r:4,class:'plot-point'}));
+  segment=[];
+ };
+ bins.forEach((bin,i)=>{
+  if(bin.rate===null){drawSegment();return}
+  const x=left+(n===1?innerW/2:innerW*i/(n-1));
+  const y=top+innerH*(1-bin.rate/100);
+  segment.push({x,y,bin});
+ });
+ drawSegment();
+ if(progressPeriod==='month'){
+  const todayIndex=bins.findIndex(b=>b.isToday);
+  if(todayIndex>=0){
+   const x=left+(n===1?innerW/2:innerW*todayIndex/(n-1));
+   add('line',{x1:x,y1:top,x2:x,y2:top+innerH,class:'today-guide'});
+   const todayBin=bins[todayIndex];
+   if(todayBin.rate!==null){
+    const y=top+innerH*(1-todayBin.rate/100);
+    const c=document.createElementNS(svgNS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',5);c.setAttribute('class','plot-point today');
+    const title=document.createElementNS(svgNS,'title');title.textContent=`今日 ${todayBin.rate}%`;c.append(title);svg.append(c);
+   }
+  }
+ }
+ chart.append(svg);
+
+}
+function renderAchievements(){
+ const total=rewardHistory.length;
+ const minutes=rewardHistory.reduce((sum,item)=>sum+(Number(item.minutes)||0),0);
+ document.getElementById('achievement-total').textContent=total;
+ document.getElementById('achievement-minutes').textContent=minutes;
+ document.getElementById('achievement-stamps').textContent=total;
+ document.getElementById('progress-total').textContent=total;
+ document.getElementById('progress-minutes').textContent=minutes;
+ renderDeadlineProgress();
+
+ document.getElementById('achievement-encouragement').textContent=total===0?'ここから、ひとつずつ。':total<5?'いい調子。ちゃんと積み重なっているよ。':total<10?'5個以上達成！続けてきた証が残っているね。':'ここまでの努力が、しっかり形になっているね。';
+ document.getElementById('achievement-summary').textContent=total===0?'最初のタスクを完了すると、ここに記録が増えていきます。':`これまでに ${total} 個のタスクを完了しました。ひとつひとつが、あなたの達成です。`;
+ const board=document.getElementById('achievement-stamp-board');board.innerHTML='';
+ const inCard=total%10,filled=total>0&&inCard===0?10:inCard;
+ for(let i=0;i<10;i++){const cell=document.createElement('div');cell.className='stamp-cell'+(i<filled?' filled':'');cell.textContent=i<filled?'★':'·';if(i===filled-1&&total>0)cell.classList.add('new-stamp');board.append(cell)}
+ document.getElementById('achievement-card-count').textContent=`${Math.floor(Math.max(0,total-1)/10)+1}枚目のカード`;
+ document.getElementById('achievement-stamp-note').textContent=total===0?'タスクを完了するたびに、スタンプがひとつ増えます。':`${inCard===0?'カードを1枚達成しました！':`次のカードまであと ${10-inCard} 個。`} 焦らず、自分のペースで。`;
+ const milestones=[
+  {n:1,name:'はじめの一歩',icon:'👣'}, {n:2,name:'小さな灯',icon:'🕯️'}, {n:3,name:'三つ葉のしるし',icon:'🌿'}, {n:4,name:'芽吹く予感',icon:'🌿'},
+  {n:5,name:'星ひとつ',icon:'⭐'}, {n:6,name:'金木犀の小径',icon:'🌿'}, {n:7,name:'一週間分の前進',icon:'🦋'}, {n:10,name:'スタンプカード達成',icon:'🏅'},
+  {n:12,name:'コツコツ継続',icon:'🏅'}, {n:15,name:'積み木の塔',icon:'👑'}, {n:16,name:'秘密の花園',icon:'🌿'}, {n:18,name:'努力の芽',icon:'🌿'},
+  {n:20,name:'習慣の芽',icon:'🌿'}, {n:25,name:'銀河のかけら',icon:'⭐'}, {n:26,name:'銀の渡り鳥',icon:'🧭'}, {n:30,name:'三十の足音',icon:'👣'},
+  {n:35,name:'風をつかむ',icon:'🌤️'}, {n:36,name:'琥珀色の午後',icon:'💎'}, {n:40,name:'琥珀のきらめき',icon:'💎'}, {n:45,name:'あと一歩の先へ',icon:'👣'},
+  {n:46,name:'虹を渡る鍵',icon:'🌈'}, {n:50,name:'金色の旗',icon:'🎨'}, {n:55,name:'追い風の旅人',icon:'🌤️'}, {n:56,name:'白昼の彗星',icon:'⭐'},
+  {n:60,name:'頼れる継続力',icon:'🏅'}, {n:65,name:'森の案内人',icon:'🌿'}, {n:66,name:'灯台守の夢',icon:'🕯️'}, {n:70,name:'七十の足跡',icon:'🍀'},
+  {n:75,name:'地図のない冒険',icon:'🧭'}, {n:76,name:'月を読む人',icon:'🌙'}, {n:80,name:'積み重ねの職人',icon:'🧱'}, {n:85,name:'雲を越えて',icon:'🌤️'},
+  {n:86,name:'紙飛行機の王国',icon:'👑'}, {n:90,name:'百への道しるべ',icon:'🧭'}, {n:95,name:'最後の助走',icon:'👣'}, {n:96,name:'波音の図書館',icon:'🌊'},
+  {n:100,name:'百の積み重ね',icon:'🧱'}, {n:125,name:'習慣の達人',icon:'🔮'}, {n:150,name:'止まらない歩み',icon:'👣'}, {n:175,name:'努力の探究者',icon:'🔭'},
+  {n:200,name:'王冠の約束',icon:'👑'}, {n:225,name:'続ける力の証',icon:'🏅'}, {n:250,name:'努力のコレクター',icon:'🧺'}, {n:275,name:'秘密の回廊',icon:'🗝️'},
+  {n:300,name:'大きな山を越えて',icon:'⛰️'}, {n:325,name:'旅の途中の焚き火',icon:'🕯️'}, {n:350,name:'挑戦の旅人',icon:'🧗'}, {n:375,name:'空色のコンパス',icon:'🌤️'},
+  {n:400,name:'揺るがない城',icon:'👑'}, {n:425,name:'流星の手紙',icon:'⭐'}, {n:450,name:'積み重ねの輝き',icon:'🧱'}, {n:475,name:'夜明けの鐘',icon:'🔔'},
+  {n:500,name:'五百の達成',icon:'🏅'}, {n:550,name:'雲海の航海士',icon:'🌊'}, {n:600,name:'六百の景色',icon:'🎨'}, {n:650,name:'深海の羅針盤',icon:'🌊'},
+  {n:700,name:'七百の軌跡',icon:'🛡️'}, {n:750,name:'果てない挑戦',icon:'🧗'}, {n:800,name:'大きな流れの中で',icon:'🎐'}, {n:850,name:'星屑の採集家',icon:'⭐'},
+  {n:900,name:'千への助走',icon:'👣'}, {n:950,name:'月明かりの道標',icon:'🌙'}, {n:1000,name:'千の足跡',icon:'🪄'}, {n:1050,name:'海鳴りの手紙',icon:'🌊'},
+  {n:1100,name:'遠雷のしるし',icon:'🏅'}, {n:1150,name:'雪解けの羅針盤',icon:'🧭'}, {n:1200,name:'空を渡る船',icon:'🌤️'}, {n:1250,name:'長い旅の途中',icon:'🧭'},
+  {n:1300,name:'薄明の観測者',icon:'🔭'}, {n:1350,name:'銀の渡り鳥・1,350',icon:'🧭'}, {n:1400,name:'記憶の庭園',icon:'🌿'}, {n:1450,name:'風待ちの灯台',icon:'🕯️'},
+  {n:1500,name:'積み重ねの伝説',icon:'🧱'}, {n:1550,name:'忘れられた温室',icon:'🪴'}, {n:1600,name:'虹の向こう側',icon:'🌈'}, {n:1650,name:'静寂のアトリエ',icon:'🎨'},
+  {n:1700,name:'静かな大海原',icon:'🌊'}, {n:1750,name:'大きな物語',icon:'📖'}, {n:1800,name:'青い火の番人',icon:'🕯️'}, {n:1850,name:'紙飛行機の王国・1,850',icon:'👑'},
+  {n:1900,name:'果てのない書庫',icon:'📖'}, {n:1950,name:'森の奥の鐘',icon:'🌿'}, {n:2000,name:'限界のその先へ',icon:'🧭'}, {n:2250,name:'秘密の花園・2,250',icon:'🌿'},
+  {n:2500,name:'二千五百の軌跡',icon:'🪴'}, {n:2750,name:'青い鳥の羽根',icon:'🪶'}, {n:3000,name:'三千の積み重ね',icon:'🧱'}, {n:3250,name:'星屑の温室',icon:'⭐'},
+  {n:3500,name:'月影の収集家',icon:'🌙'}, {n:3750,name:'灯台守の夢・3,750',icon:'🕯️'}, {n:4000,name:'果てしない道',icon:'🧭'}, {n:4250,name:'光の採掘者',icon:'✨'},
+  {n:4500,name:'玻璃の回廊',icon:'🗝️'}, {n:4750,name:'遠くの汽笛',icon:'⛵'}, {n:5000,name:'五千の達成',icon:'🏅'}, {n:5500,name:'青い鳥の羽根・5,500',icon:'🪶'},
+  {n:6000,name:'木漏れ日の標本',icon:'🌿'}, {n:6500,name:'雨粒のオルゴール',icon:'🔔'}, {n:7000,name:'蒼天の旅券',icon:'🌤️'}, {n:7500,name:'伝説を超えて',icon:'🪷'},
+  {n:8000,name:'夢を結ぶ糸',icon:'🧵'}, {n:8500,name:'風待ちの灯台・8,500',icon:'🕯️'}, {n:9000,name:'風紋の地図',icon:'🌤️'}, {n:9500,name:'遠くの汽笛・9,500',icon:'⛵'},
+  {n:10000,name:'一万の足跡',icon:'🛡️'}, {n:11000,name:'水平線の向こう',icon:'🌊'}, {n:12000,name:'雲間の灯火',icon:'🕯️'}, {n:13000,name:'夜明けを待つ船',icon:'⛵'},
+  {n:14000,name:'月影の収集家・14,000',icon:'🌙'}, {n:15000,name:'終わらない探究',icon:'🔭'}, {n:16000,name:'小さな天文台',icon:'⭐'}, {n:17000,name:'森の奥の鐘・17,000',icon:'🌿'},
+  {n:18000,name:'玻璃の回廊・18,000',icon:'🗝️'}, {n:19000,name:'海鳴りの手紙・19,000',icon:'🌊'}, {n:20000,name:'無限へ続く道',icon:'🧭'}
+];
+
+ const milestonesReached=[1,2,3,4,5,7,10,12,15,18,20,25,30,35,40,45,50,60,70,75,80,90,100,125,150,175,200,225,250,300,350,400,450,500,600,700,750,800,900,1000,1250,1500,1750,2000,2500,3000,4000,5000,7500,10000,15000,20000].filter(n=>total>=n).length;
+ document.getElementById('progress-milestones').textContent=milestonesReached;
+ document.getElementById('progress-note').textContent=total===0?'まずはひとつ、タスクを完了してみましょう。':`これまでに ${total} 個を完了。次の節目も、自分のペースで目指そう。`;
+ const badges=document.getElementById('achievement-badges');badges.innerHTML='';
+ milestones.forEach(m=>{const item=document.createElement('div');item.className='achievement-badge'+(total>=m.n?' unlocked':'');const icon=document.createElement('div');icon.className='achievement-badge-icon';icon.textContent=m.icon;const copy=document.createElement('div');const title=document.createElement('strong');title.textContent=m.name;const desc=document.createElement('small');desc.textContent=total>=m.n?'獲得済み':`${m.n}個のタスク完了で獲得`;copy.append(title,desc);item.append(icon,copy);badges.append(item)});
+
+ const shuffledMilestones=[...milestones];
+ for(let i=shuffledMilestones.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [shuffledMilestones[i],shuffledMilestones[j]]=[shuffledMilestones[j],shuffledMilestones[i]];
+ }
+ const stickerList=shuffledMilestones.map(m=>({
+  id:`milestone-${m.n}`,icon:m.icon,image:null,title:m.name,
+  desc:`タスクを${m.n.toLocaleString('ja-JP')}個完了`,
+  unlocked:total>=m.n,category:'節目のバッジ'
+ }));
+ const completedDates=rewardHistory.map(x=>{const d=x.completedAt?new Date(x.completedAt):null;return d&&!Number.isNaN(d.getTime())?`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`:null;}).filter(Boolean);
+ const dayCounts=completedDates.reduce((a,d)=>(a[d]=(a[d]||0)+1,a),{});
+ const completedMinutes=rewardHistory.map(x=>Number(x.minutes)||0);
+ const titleText=rewardHistory.map(x=>String(x.title||''));
+ const streakDays=new Set(completedDates);
+ let longestStreak=0;
+ [...streakDays].sort().forEach(date=>{
+  const d=new Date(`${date}T12:00:00`);let run=1;
+  for(let i=1;i<60;i++){const prev=new Date(d);prev.setDate(d.getDate()-i);const key=`${prev.getFullYear()}-${pad(prev.getMonth()+1)}-${pad(prev.getDate())}`;if(streakDays.has(key))run++;else break;}
+  longestStreak=Math.max(longestStreak,run);
+ });
+ const maxDayCount=Math.max(0,...Object.values(dayCounts));
+ const datesSorted=[...streakDays].sort();
+ const colorsDone=new Set(rewardHistory.map(x=>x.color).filter(Boolean));
+ const prioritiesDone=new Set(rewardHistory.map(x=>x.priority).filter(Boolean));
+ const dueItems=rewardHistory.filter(x=>x.due);
+ const onTimeItems=dueItems.filter(x=>{const d=new Date(x.due+'T23:59:59');return x.completedAt&&d.getTime()>=x.completedAt;});
+ const onTimeRate=dueItems.length?onTimeItems.length/dueItems.length:0;
+ const hasWeekImprovement=(()=>{
+  const now=new Date();const startThis=new Date(now);startThis.setDate(now.getDate()-6);startThis.setHours(0,0,0,0);
+  const startPrev=new Date(startThis);startPrev.setDate(startThis.getDate()-7);
+  const thisCount=rewardHistory.filter(x=>x.completedAt&&new Date(x.completedAt)>=startThis).length;
+  const prevCount=rewardHistory.filter(x=>x.completedAt&&new Date(x.completedAt)>=startPrev&&new Date(x.completedAt)<startThis).length;
+  return thisCount>prevCount&&prevCount>0;
+ })();
+ const dueNearCompletion=rewardHistory.some(x=>{
+  if(!x.due||!x.completedAt)return false;
+  const due=new Date(x.due+'T23:59:59');const completed=new Date(x.completedAt);
+  return due.getTime()>=completed.getTime()&&due.getTime()-completed.getTime()<=60*60*1000;
+ });
+ const hasReturnAfterGap=rewardHistory.some((x,i)=>{
+  if(i===rewardHistory.length-1)return false;
+  const current=x.completedAt, older=rewardHistory.slice(i+1).map(y=>y.completedAt).filter(Boolean).map(Number);
+  return current&&older.some(t=>Number(current)-t>=7*24*60*60*1000);
+ });
+ const hasElevenEleven=rewardHistory.some(x=>{if(!x.completedAt)return false;const d=new Date(x.completedAt);return d.getHours()===11&&d.getMinutes()===11;});
+ const hasMatchingClock=rewardHistory.some(x=>{if(!x.completedAt)return false;const d=new Date(x.completedAt);return d.getHours()===d.getMinutes();});
+ const hasMidnightEdge=rewardHistory.some(x=>{if(!x.completedAt)return false;const d=new Date(x.completedAt);return (d.getHours()===23&&d.getMinutes()>=55)||(d.getHours()===0&&d.getMinutes()<=5);});
+ const hasScheduledWindow=rewardHistory.some(x=>{
+  if(!x.completedAt||!x.date||!x.time)return false;
+  const target=new Date(`${x.date}T${x.time}:00`);const delta=Math.abs(new Date(x.completedAt)-target);
+  return Number.isFinite(delta)&&delta<=30*60*1000;
+ });
+ const firstCompleted=rewardHistory.length>0;
+ // 操作イベントを使った計測。達成条件を満たしたミッションは永久に獲得済みとして保存する。
+ const events=eventHistory;
+ const taskEvents=type=>events.filter(e=>e.type===type);
+ const completedTasks=rewardHistory;
+ const uniqueDates=new Set(completedDates);
+ const allPriorityLevels=new Set(completedTasks.map(x=>x.priority||'medium'));
+ const hasCreatedScheduled=taskEvents('task_created').some(e=>e.task&&(e.task.date&&e.task.time))||taskEvents('task_edited').some(e=>e.after&&e.after.date&&e.after.time);
+ const hasFutureTask=taskEvents('task_created').some(e=>e.task&&e.task.date&&e.task.date>iso(new Date(e.at)))||taskEvents('task_edited').some(e=>e.after&&e.after.date&&e.after.date>iso(new Date(e.at)))||taskEvents('task_placed').some(e=>e.to&&e.to.date&&e.to.date>iso(new Date(e.at)));
+ const hasTaskCreated=taskEvents('task_created').length>0;
+ const hasEdited=taskEvents('task_edited').length>0;
+ const hasMovedDate=taskEvents('task_date_changed').some(e=>e.from!==e.to);
+ const hasChangedTime=taskEvents('task_time_changed').some(e=>e.from!==e.to);
+ const hasChangedPriority=taskEvents('task_priority_changed').length>0;
+ const hasChangedColor=taskEvents('task_color_changed').length>0;
+ const hasChangedDuration=taskEvents('task_duration_changed').length>0;
+ const hasDeleted=taskEvents('task_deleted').length>0;
+ const hasAllPriority= ['high','medium','low'].every(p=>allPriorityLevels.has(p));
+ const hasMorningAndNight=completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getHours()<11)&&completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getHours()>=20);
+ const distinctColors=new Set(completedTasks.map(x=>x.color).filter(Boolean));
+ const has3DayWeek=(()=>{const weeks={};completedDates.forEach(d=>{const dt=new Date(d+'T12:00:00');dt.setDate(dt.getDate()-((dt.getDay()+6)%7));const k=iso(dt);weeks[k]=(weeks[k]||new Set());weeks[k].add(d)});return Object.values(weeks).some(s=>s.size>=5)})();
+ const has5In7=(()=>{const dates=[...uniqueDates].map(d=>new Date(d+'T12:00:00').getTime());return dates.some(t=>dates.filter(v=>Math.abs(v-t)<=6*86400000).length>=5)})();
+ const hasWeekPair=(()=>{const weeks={};completedDates.forEach(d=>{const dt=new Date(d+'T12:00:00');dt.setDate(dt.getDate()-((dt.getDay()+6)%7));const k=iso(dt);weeks[k]=(weeks[k]||new Set());weeks[k].add(d)});const ks=Object.keys(weeks).sort();return ks.some(k=>{const next=iso(addDays(parse(k),7));return weeks[k].size>=3&&weeks[next]&&weeks[next].size>=3})})();
+ const hasOnePerDayThree=(()=>{const counts=Object.values(dayCounts);return counts.filter(n=>n===1).length>=3})();
+ const hasSameDayAllPriorities=(()=>Object.values(completedDates.reduce((a,d)=>{const items=completedTasks.filter(x=>x.completedAt&&iso(new Date(x.completedAt))===d);a[d]=new Set(items.map(x=>x.priority||'medium'));return a},{})).some(s=>['high','medium','low'].every(p=>s.has(p))))();
+ const hasAllFields=completedTasks.some(x=>x.date&&x.time&&x.priority);
+ const has3Colors=distinctColors.size>=3;
+ const has7Colors=distinctColors.size>=7;
+ const hasDayWith3Priorities=hasSameDayAllPriorities;
+ const hasEmptyMoment=events.some(e=>e.type==='task_deleted'&&e.lastTask===true);
+ const hasZeroOpenTasks=taskEvents('zero_open_tasks').length>0;
+ const hasConsecutive3=taskEvents('task_completed').some((e,i,arr)=>i>=2&&arr.slice(i-2,i+1).every(x=>new Date(x.at).toDateString()===new Date(e.at).toDateString()));
+ const hasMultipleMissionUnlocks=completedTasks.some(x=>x.unlockedMissionsAtCompletion&&x.unlockedMissionsAtCompletion.length>=2);
+ const eventTask=(e)=>e&&e.task?e.task:{};
+ const createdEvents=taskEvents('task_created');
+ const editEvents=taskEvents('task_edited');
+ const deletedEvents=taskEvents('task_deleted');
+ const allEventTasks=[...createdEvents.map(e=>eventTask(e)),...editEvents.map(e=>eventTask(e)),...deletedEvents.map(e=>eventTask(e))];
+ const dateChangedEvents=taskEvents('task_date_changed');
+ const createdWithDue=createdEvents.some(e=>eventTask(e).due);
+ const completedOnTimeDays=new Set(completedTasks.filter(x=>x.completedAt&&x.due&&iso(new Date(x.completedAt))<=x.due).map(x=>iso(new Date(x.completedAt))));
+ const titlesCompleted=new Set(completedTasks.map(x=>(x.title||'').trim().toLocaleLowerCase()).filter(Boolean));
+ const createdTitles=new Set(createdEvents.map(e=>(eventTask(e).title||'').trim().toLocaleLowerCase()).filter(Boolean));
+ const hasRepeatTitle=[...titlesCompleted].some(t=>createdTitles.has(t));
+ const hasDueDateTask=completedTasks.some(x=>x.due);
+ const hasTaskNotes=allEventTasks.some(t=>typeof t.notes==='string'&&t.notes.trim().length>0);
+ const hasNotesCompletion=completedTasks.some(x=>typeof x.notes==='string'&&x.notes.trim().length>0);
+ const hasDateAndDue=completedTasks.some(x=>x.date&&x.due);
+ const hasLateNightAndMorning=completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getHours()>=22)&&completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getHours()<8);
+ const hasDurationVariety=new Set(completedTasks.map(x=>x.minutes).filter(Number.isFinite)).size>=3;
+ const hasTitleLong=completedTasks.some(x=>(x.title||'').trim().length>=30);
+ const hasTitleShort=completedTasks.some(x=>(x.title||'').trim().length>0&&(x.title||'').trim().length<=5);
+ const hasTitleVariety=new Set(completedTasks.map(x=>(x.title||'').trim().toLocaleLowerCase()).filter(Boolean)).size>=10;
+ const hasWeekendBoth=completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getDay()===6)&&completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getDay()===0);
+ const hasEarlyDue=completedTasks.some(x=>x.completedAt&&x.due&&Math.round((new Date(x.due+'T23:59:59').getTime()-x.completedAt)/86400000)>=3);
+ const hasOneDayAllColor=(()=>{const m={};completedTasks.forEach(x=>{if(!x.completedAt||!x.color)return;const d=iso(new Date(x.completedAt));(m[d]||(m[d]=new Set())).add(x.color)});return Object.values(m).some(s=>s.size>=3)})();
+ const hasSamePriority3=(()=>{const m={};completedTasks.forEach(x=>{if(!x.completedAt)return;const d=iso(new Date(x.completedAt)),p=x.priority||'medium';(m[d]||(m[d]=[])).push(p)});return Object.values(m).some(a=>a.length>=3&&new Set(a).size===1)})();
+ const hasSameTitleDifferentDays=(()=>{const m={};completedTasks.forEach(x=>{if(!x.completedAt||!x.title)return;const k=x.title.trim().toLocaleLowerCase();(m[k]||(m[k]=new Set())).add(iso(new Date(x.completedAt)))});return Object.values(m).some(s=>s.size>=2)})();
+ const hasTaskRecreatedAfterDelete=deletedEvents.some(d=>createdEvents.some(c=>eventTask(c).title&&eventTask(d).title&&eventTask(c).title.trim().toLowerCase()===eventTask(d).title.trim().toLowerCase()&&c.at>d.at));
+ const hasMultipleEditTypes=new Set(editEvents.flatMap(e=>e.changedFields||[])).size>=4;
+ const hasDateRescue=dateChangedEvents.some(e=>!e.from&&!!e.to);
+ const hasDateUnscheduled=dateChangedEvents.some(e=>!!e.from&&!e.to);
+ const hasPriorityUp=taskEvents('task_priority_changed').some(e=>e.to==='high'&&e.from!=='high');
+ const hasPriorityDown=taskEvents('task_priority_changed').some(e=>e.from==='high'&&e.to!=='high');
+ const hasColorCycle=taskEvents('task_color_changed').length>=3;
+ const hasDurationIncrease=taskEvents('task_duration_changed').some(e=>Number(e.to)>Number(e.from));
+ const hasDurationDecrease=taskEvents('task_duration_changed').some(e=>Number(e.to)<Number(e.from));
+ const hasManyTasksCreated=createdEvents.length>=25;
+ const hasManyTasksEdited=editEvents.length>=10;
+ const hasManyTasksDeleted=deletedEvents.length>=5;
+ const hasTaskWithNoDue=completedTasks.some(x=>!x.due);
+ const hasDueAndNoDue=completedTasks.some(x=>x.due)&&completedTasks.some(x=>!x.due);
+ const hasManyDayStreaks=longestStreak>=5&&Object.values(dayCounts).filter(n=>n>=1).length>=10;
+ const hasTwoLongTasks=completedTasks.filter(x=>(x.minutes||0)>=60).length>=3;
+ const hasManyShortTasks=completedTasks.filter(x=>(x.minutes||0)>0&&(x.minutes||0)<=15).length>=5;
+ const hasDayWithMixedLengths=(()=>{const m={};completedTasks.forEach(x=>{if(!x.completedAt)return;const d=iso(new Date(x.completedAt));(m[d]||(m[d]=[])).push(x.minutes||30)});return Object.values(m).some(a=>a.some(n=>n<=15)&&a.some(n=>n>=60))})();
+ const hasCompletionAfterEdit=editEvents.some(e=>completedTasks.some(x=>x.title===(e.after||{}).title));
+ const hasThreeWeekdays=new Set(completedTasks.filter(x=>x.completedAt&&new Date(x.completedAt).getDay()>=1&&new Date(x.completedAt).getDay()<=5).map(x=>new Date(x.completedAt).getDay())).size>=3;
+ const hasAllWeekdayRange=new Set(completedTasks.filter(x=>x.completedAt).map(x=>new Date(x.completedAt).getDay())).size>=6;
+ const hasSameDayMorningAfternoon=(()=>{const m={};completedTasks.forEach(x=>{if(!x.completedAt)return;const d=iso(new Date(x.completedAt)),h=new Date(x.completedAt).getHours();(m[d]||(m[d]=new Set())).add(h<12?'morning':h<18?'afternoon':'evening')});return Object.values(m).some(s=>s.size>=2)})();
+ const hasHourSpread=new Set(completedTasks.filter(x=>x.completedAt).map(x=>new Date(x.completedAt).getHours())).size>=8;
+ const hasMonthStreak=(()=>{const months=new Set(completedTasks.filter(x=>x.completedAt).map(x=>{const d=new Date(x.completedAt);return d.getFullYear()+'-'+d.getMonth()}));return months.size>=3})();
+ const hasTenDaysInMonth=(()=>{const months={};completedTasks.forEach(x=>{if(!x.completedAt)return;const d=new Date(x.completedAt),k=d.getFullYear()+'-'+d.getMonth();(months[k]||(months[k]=new Set())).add(iso(d))});return Object.values(months).some(s=>s.size>=10)})();
+ const hasRepeatedSameTime=(()=>{const m={};completedTasks.forEach(x=>{if(!x.completedAt)return;const d=new Date(x.completedAt),k=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');m[k]=(m[k]||0)+1});return Object.values(m).some(n=>n>=3)})();
+ const hasExactlyTwoTasksDay=Object.values(dayCounts).some(n=>n===2);
+ const hasExactlyFourTasksDay=Object.values(dayCounts).some(n=>n===4);
+ const hasDayOverTen=Object.values(dayCounts).some(n=>n>=10);
+ const hasTaskCompletedSameDayCreated=completedTasks.some(x=>x.created&&x.completedAt&&iso(new Date(x.created))===iso(new Date(x.completedAt)));
+ const hasTaskCompletedNextDay=completedTasks.some(x=>x.created&&x.completedAt&&iso(new Date(x.completedAt))===iso(addDays(new Date(x.created),1)));
+ const hasDueDateEdit=editEvents.some(e=>e.changedFields&&e.changedFields.includes('due'));
+ const hasDeadlineAndColor=completedTasks.some(x=>x.due&&x.color);
+ const hasNoScheduleCompletion=completedTasks.some(x=>!x.date&&!x.time);
+ const hasCreatedDeletedPair=deletedEvents.length>0&&createdEvents.length>deletedEvents.length;
+ const hasReturnFromOldest=hasReturnAfterGap;
+ const hasFirstCreatedInHistory=createdEvents.length>0;
+ const hasFirstEditAfterCreate=editEvents.some(e=>createdEvents.some(c=>eventTask(c).id===e.taskId&&c.at<=e.at));
+ const hasTaskWithHighAndColor=completedTasks.some(x=>x.priority==='high'&&x.color);
+ const hasPriorityMixSameDay=hasSameDayAllPriorities;
+ const hasTaskDueFuture=completedTasks.some(x=>x.due&&x.completedAt&&x.due>iso(new Date(x.completedAt)));
+ const hasTaskDueToday=completedTasks.some(x=>x.due&&x.completedAt&&x.due===iso(new Date(x.completedAt)));
+ const hasTaskDoneBeforeDue=completedTasks.some(x=>x.due&&x.completedAt&&iso(new Date(x.completedAt))<x.due);
+ const hasTaskDoneAfterDue=completedTasks.some(x=>x.due&&x.completedAt&&iso(new Date(x.completedAt))>x.due);
+ const hasTimeExactlyOnHour=completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getMinutes()===0);
+ const hasTimeExactlyHalf=completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getMinutes()===30);
+ const hasEvenHour=completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getHours()%2===0);
+ const hasOddHour=completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getHours()%2===1);
+ const hasWeekdayAndWeekend=completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getDay()>=1&&new Date(x.completedAt).getDay()<=5)&&hasWeekendBoth;
+ const hasNoonAndMidnight=completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getHours()===12)&&completedTasks.some(x=>x.completedAt&&new Date(x.completedAt).getHours()===0);
+ const hasSevenDayWindow = has5In7;
+ const hasTenTasksOneDay = hasDayOverTen;
+ const hasMixedPriorities = new Set(completedTasks.map(x=>x.priority||'medium')).size>=2;
+ const hasManyDistinctDays = uniqueDates.size>=30;
+ const hasMoreThan100 = completedTasks.length>=100;
+ const moreMissions=[
+  {id:'mission-due-keeper',icon:'📅',title:'締切の番人',desc:'期限が設定されたタスクを完了する',ok:hasDueDateTask},
+  {id:'mission-early-planner',icon:'🗓️',title:'早めの準備',desc:'期限の3日以上前にタスクを完了する',ok:hasEarlyDue},
+  {id:'mission-deadline-spectrum',icon:'📬',title:'締切の両側',desc:'期限前と期限後の両方でタスクを完了する',ok:hasTaskDoneBeforeDue&&hasTaskDoneAfterDue},
+  {id:'mission-due-today',icon:'📍',title:'今日が期限',desc:'期限当日にタスクを完了する',ok:hasTaskDueToday},
+  {id:'mission-no-deadline',icon:'🕊️',title:'期限のない自由',desc:'期限を設定していないタスクを完了する',ok:hasTaskWithNoDue},
+  {id:'mission-deadline-balance',icon:'⚖️',title:'締切との付き合い方',desc:'期限あり・期限なしのタスクを両方完了する',ok:hasDueAndNoDue},
+  {id:'mission-short-steps',icon:'🐜',title:'小さな歩幅',desc:'15分以下のタスクを5件完了する',ok:hasManyShortTasks},
+  {id:'mission-deep-work',icon:'🪵',title:'深く潜る人',desc:'60分以上のタスクを3件完了する',ok:hasTwoLongTasks},
+  {id:'mission-mixed-day',icon:'🌓',title:'緩急自在',desc:'同じ日に15分以下と60分以上のタスクを完了する',ok:hasDayWithMixedLengths},
+  {id:'mission-title-short',icon:'🔹',title:'簡潔な記録',desc:'タイトルが5文字以内のタスクを完了する',ok:hasTitleShort},
+  {id:'mission-title-long',icon:'📝',title:'詳しい設計図',desc:'タイトルが30文字以上のタスクを完了する',ok:hasTitleLong},
+  {id:'mission-many-titles',icon:'📚',title:'言葉の引き出し',desc:'異なるタイトルのタスクを10種類完了する',ok:hasTitleVariety},
+  {id:'mission-same-title',icon:'🔁',title:'もう一度の価値',desc:'同じタイトルのタスクを異なる日に完了する',ok:hasSameTitleDifferentDays},
+  {id:'mission-weekend-pair',icon:'🎈',title:'土日セット',desc:'土曜日と日曜日の両方でタスクを完了する',ok:hasWeekendBoth},
+  {id:'mission-weekdays-three',icon:'🏫',title:'平日の足音',desc:'異なる平日3日以上でタスクを完了する',ok:hasThreeWeekdays},
+  {id:'mission-weekday-range',icon:'🧭',title:'曜日を巡る旅',desc:'6種類以上の曜日でタスクを完了する',ok:hasAllWeekdayRange},
+  {id:'mission-same-day-color',icon:'🎨',title:'一日の色見本',desc:'同じ日に3色以上のタスクを完了する',ok:hasOneDayAllColor},
+  {id:'mission-same-priority',icon:'🚥',title:'同じ旗のもとに',desc:'同じ日に同じ優先度のタスクを3件完了する',ok:hasSamePriority3},
+  {id:'mission-three-hours',icon:'🕰️',title:'時刻の住人',desc:'8種類以上の異なる時刻（時）にタスクを完了する',ok:hasHourSpread},
+  {id:'mission-repeated-time',icon:'🔔',title:'いつもの時刻',desc:'同じ時刻に3回以上タスクを完了する',ok:hasRepeatedSameTime},
+  {id:'mission-on-hour',icon:'🕛',title:'きりのいい瞬間',desc:'分が00分の時刻にタスクを完了する',ok:hasTimeExactlyOnHour},
+  {id:'mission-half-hour',icon:'🕧',title:'半分の鐘',desc:'分が30分の時刻にタスクを完了する',ok:hasTimeExactlyHalf},
+  {id:'mission-even-hour',icon:'🔢',title:'偶数の時間',desc:'時が偶数のときにタスクを完了する',ok:hasEvenHour},
+  {id:'mission-odd-hour',icon:'🧮',title:'奇数の時間',desc:'時が奇数のときにタスクを完了する',ok:hasOddHour},
+  {id:'mission-month-three',icon:'🌙',title:'三つの月を渡る',desc:'3つの異なる月にタスクを完了する',ok:hasMonthStreak},
+  {id:'mission-ten-days-month',icon:'🌼',title:'月の花壇',desc:'同じ月の10日以上でタスクを完了する',ok:hasTenDaysInMonth},
+  {id:'mission-many-days',icon:'🗓️',title:'三十日の記録',desc:'異なる30日でタスクを完了する',ok:hasManyDistinctDays},
+  {id:'mission-hundred',icon:'💯',title:'百の足跡',desc:'タスクを100件完了する',ok:hasMoreThan100},
+  {id:'mission-exactly-two',icon:'✌️',title:'二つでひと組',desc:'1日にちょうど2件のタスクを完了する',ok:hasExactlyTwoTasksDay},
+  {id:'mission-exactly-four',icon:'🍀',title:'四つ葉の一日',desc:'1日にちょうど4件のタスクを完了する',ok:hasExactlyFourTasksDay},
+  {id:'mission-ten-day',icon:'🏆',title:'十の達成',desc:'1日に10件以上のタスクを完了する',ok:hasTenTasksOneDay},
+  {id:'mission-same-day-create',icon:'🚀',title:'作って、終える',desc:'作成した当日にタスクを完了する',ok:hasTaskCompletedSameDayCreated},
+  {id:'mission-next-day',icon:'🌅',title:'一晩寝かせて',desc:'作成日の翌日にタスクを完了する',ok:hasTaskCompletedNextDay},
+  {id:'mission-edit-many',icon:'🛠️',title:'磨き上げる人',desc:'1つのタスクで4種類以上の項目を編集する',ok:hasMultipleEditTypes},
+  {id:'mission-date-rescue',icon:'🧷',title:'予定表への救出',desc:'日付未設定のタスクに日付を設定する',ok:hasDateRescue},
+  {id:'mission-date-release',icon:'🪽',title:'予定からの解放',desc:'設定済みの日付を外す',ok:hasDateUnscheduled},
+  {id:'mission-priority-up',icon:'⬆️',title:'優先順位を上げる',desc:'タスクの優先度を高に変更する',ok:hasPriorityUp},
+  {id:'mission-priority-down',icon:'⬇️',title:'肩の力を抜く',desc:'高優先度のタスクを別の優先度に変更する',ok:hasPriorityDown},
+  {id:'mission-color-explorer',icon:'🖌️',title:'色彩の探検家',desc:'タスクの色を3回以上変更する',ok:hasColorCycle},
+  {id:'mission-duration-up',icon:'➕',title:'時間を広げる',desc:'タスクの所要時間を増やす',ok:hasDurationIncrease},
+  {id:'mission-duration-down',icon:'➖',title:'時間を整える',desc:'タスクの所要時間を減らす',ok:hasDurationDecrease},
+  {id:'mission-creator',icon:'🧱',title:'計画の建築家',desc:'タスクを25件作成する',ok:hasManyTasksCreated},
+  {id:'mission-editor',icon:'🪡',title:'細部へのこだわり',desc:'タスクを10回編集する',ok:hasManyTasksEdited},
+  {id:'mission-cleanup',icon:'🧽',title:'整理整頓の達人',desc:'タスクを5件削除する',ok:hasManyTasksDeleted},
+  {id:'mission-recovery',icon:'🌿',title:'作り直す勇気',desc:'削除したタスクと同じタイトルのタスクをあとから作成する',ok:hasTaskRecreatedAfterDelete},
+  {id:'mission-day-diversity',icon:'🎭',title:'日々の表情',desc:'同じ日に異なる時間帯でタスクを完了する',ok:hasSameDayMorningAfternoon},
+  {id:'mission-mixed-week',icon:'🌦️',title:'平日と休日',desc:'平日と土日の両方でタスクを完了する',ok:hasWeekdayAndWeekend},
+  {id:'mission-mixed-priority',icon:'🎛️',title:'優先度の調律師',desc:'異なる2段階以上の優先度のタスクを完了する',ok:hasMixedPriorities},
+  {id:'mission-due-date-edit',icon:'🗓️',title:'締切の見直し',desc:'タスクの期限を変更する',ok:hasDueDateEdit},
+  {id:'mission-color-priority',icon:'🚩',title:'目印のある仕事',desc:'色と高優先度を設定したタスクを完了する',ok:hasTaskWithHighAndColor},
+  {id:'mission-date-and-deadline',icon:'📆',title:'二つの約束',desc:'予定日と期限の両方を設定したタスクを完了する',ok:hasDateAndDue},
+  {id:'mission-long-streak-and-days',icon:'🌳',title:'根を張る習慣',desc:'5日連続達成し、累計10日以上でタスクを完了する',ok:hasManyDayStreaks},
+ ];
+  const missionExtras=[
+  {id:'mission-first-plan',icon:'🗺️',title:'最初の設計図',desc:'日付と開始時刻の両方を設定したタスクを作成する',ok:hasCreatedScheduled},
+  {id:'mission-three-signs',icon:'📌',title:'三つの道しるべ',desc:'日付が設定されたタスクを3件作成する',ok:(taskEvents('task_created').filter(e=>e.task&&e.task.date).length+taskEvents('task_edited').filter(e=>e.after&&e.after.date).length+taskEvents('task_placed').length)>=3},
+  {id:'mission-future-letter',icon:'✉️',title:'未来への投函',desc:'翌日以降の日付を設定したタスクを作成する',ok:hasFutureTask},
+  {id:'mission-lookahead',icon:'🔭',title:'先を読む人',desc:'3日以上先の日付を設定したタスクを作成する',ok:taskEvents('task_created').some(e=>e.task&&e.task.date&&e.task.date>=iso(addDays(new Date(e.at),3)))||taskEvents('task_edited').some(e=>e.after&&e.after.date&&e.after.date>=iso(addDays(new Date(e.at),3)))||taskEvents('task_placed').some(e=>e.to&&e.to.date&&e.to.date>=iso(addDays(new Date(e.at),3)))},
+  {id:'mission-plan-edit',icon:'✏️',title:'計画の再設計者',desc:'作成済みタスクの内容を初めて編集する',ok:hasEdited},
+  {id:'mission-move',icon:'🚚',title:'予定の引っ越し人',desc:'タスクの日付を変更する',ok:hasMovedDate},
+  {id:'mission-time-change',icon:'🕒',title:'時間割の再設計者',desc:'タスクの開始時刻を変更する',ok:hasChangedTime},
+  {id:'mission-priority-change',icon:'🎚️',title:'優先順位の再発見',desc:'タスクの優先度を変更する',ok:hasChangedPriority},
+  {id:'mission-recolor',icon:'🖍️',title:'色の塗り替え',desc:'タスクの色を変更する',ok:hasChangedColor},
+  {id:'mission-duration-change',icon:'⌛',title:'見積もりの修正者',desc:'タスクの所要時間を変更する',ok:hasChangedDuration},
+  {id:'mission-rebuild',icon:'🧩',title:'予定の再構築',desc:'タスクを編集したあと、そのタスクを完了する',ok:events.some(e=>e.type==='task_edited'&&e.taskId&&completedTasks.some(x=>x.taskId===e.taskId))},
+  {id:'mission-all-priorities',icon:'🚦',title:'三つの歯車',desc:'高・中・低の3段階の優先度のタスクを完了する',ok:hasAllPriority},
+  {id:'mission-day-ends',icon:'🌄',title:'一日の両端',desc:'朝（11時前）と夜（20時以降）の両方でタスクを完了する',ok:hasMorningAndNight},
+  {id:'mission-seven-colors',icon:'🌈',title:'七色の仕事人',desc:'7種類の異なる色のタスクを完了する',ok:has7Colors},
+  {id:'mission-small-large',icon:'⚖️',title:'大小さまざま',desc:'15分以下と60分以上のタスクを両方完了する',ok:completedMinutes.some(m=>m>0&&m<=15)&&completedMinutes.some(m=>m>=60)},
+  {id:'mission-bridge',icon:'🌉',title:'昨日と今日の架け橋',desc:'連続する2日間で、それぞれ異なる色のタスクを完了する',ok:(()=>{const by={};completedTasks.forEach(x=>{if(!x.completedAt||!x.color)return;const d=iso(new Date(x.completedAt));(by[d]||(by[d]=new Set())).add(x.color)});return Object.keys(by).some(d=>by[iso(addDays(parse(d),1))]&&[...by[d]].some(c=>[...by[iso(addDays(parse(d),1))]].some(n=>n!==c)))})()},
+  {id:'mission-five-days',icon:'🌊',title:'波の向こうへ',desc:'1週間のうち5日以上でタスクを完了する',ok:has5In7},
+  {id:'mission-week-rhythm',icon:'🗓️',title:'週のリズム',desc:'2週連続で、それぞれ3日以上タスクを完了する',ok:hasWeekPair},
+  {id:'mission-quiet',icon:'🍃',title:'静かな継続',desc:'1日に1〜3件の達成を5日以上作る',ok:Object.values(dayCounts).filter(n=>n>=1&&n<=3).length>=5},
+  {id:'mission-two-months',icon:'🌗',title:'月を渡る船',desc:'異なる2つの月にまたがってタスクを完了する',ok:new Set(completedTasks.filter(x=>x.completedAt).map(x=>{const d=new Date(x.completedAt);return `${d.getFullYear()}-${d.getMonth()}`})).size>=2},
+  {id:'mission-empty-desk',icon:'🪑',title:'空いた机',desc:'すべての未完了タスクがなくなる',ok:hasZeroOpenTasks},
+  {id:'mission-heavy-load',icon:'🎒',title:'肩の荷下ろし',desc:'高優先度の未完了タスクをすべて完了する',ok:taskEvents('zero_high_priority_tasks').length>0},
+  {id:'mission-week-finish',icon:'🌙',title:'一週間の締めくくり',desc:'日曜日に、その週の未完了タスクをゼロにする',ok:taskEvents('zero_open_tasks').some(e=>new Date(e.at).getDay()===0)},
+  {id:'mission-open-empty',icon:'🫧',title:'片付いた景色',desc:'未完了タスクがない状態でアプリを開く',ok:taskEvents('opened_with_no_tasks').length>0},
+  {id:'mission-three-streak-complete',icon:'⚡',title:'完了の連鎖',desc:'同じ日に3件連続でタスクを完了する',ok:hasConsecutive3},
+  {id:'mission-toolbox',icon:'🧰',title:'道具箱の開封',desc:'優先度・色・所要時間など3種類以上の設定を使ってタスクを完了する',ok:(new Set(completedTasks.flatMap(x=>[(x.priority?'priority':null),(x.color?'color':null),(x.minutes?'minutes':null),(x.date?'date':null),(x.time?'time':null)].filter(Boolean)))).size>=3},
+  {id:'mission-first-history',icon:'🔎',title:'記録の探究者',desc:'達成履歴の画面を初めて開く',ok:taskEvents('achievement_tab_opened').some(e=>e.tab==='records')},
+  {id:'mission-first-collection',icon:'🗂️',title:'収集家の入口',desc:'ステッカーコレクションの画面を初めて開く',ok:taskEvents('achievement_tab_opened').some(e=>e.tab==='stickers')},
+  {id:'mission-operation-first',icon:'🧭',title:'目標の航海図',desc:'最初のオペレーションを作成する',ok:operations.length>=1},
+  {id:'mission-operation-achieved',icon:'🏁',title:'ゴールの旗',desc:'オペレーションを1件達成する',ok:operations.some(o=>o.status==='achieved')},
+  {id:'mission-operation-number',icon:'🔢',title:'数字で証明',desc:'数値型オペレーションの実績を記録する',ok:operations.some(o=>o.mode==='result'&&o.conditionType==='number'&&o.actual!==null&&o.actual!==undefined)},
+  {id:'mission-operation-text',icon:'✍️',title:'言葉の誓い',desc:'自由記述型オペレーションを達成する',ok:operations.some(o=>o.mode==='result'&&o.conditionType==='text'&&o.status==='achieved')},
+  {id:'mission-operation-deadline',hidden:true,icon:'⌛',title:'締切からの学び',desc:'期限を過ぎたオペレーションの未達成を記録する',ok:operations.some(o=>o.status==='failed')},
+
+  {id:'mission-one-per-day',icon:'🪶',title:'静かな達成者',desc:'1日に1件だけタスクを完了する日を3回作る',ok:hasOnePerDayThree},
+  {id:'mission-three-priorities',icon:'🔑',title:'偶然の交差点',desc:'同じ日に高・中・低のタスクをすべて完了する',ok:hasDayWith3Priorities},
+  {id:'mission-three-keys',icon:'🗝️',title:'三つの鍵',desc:'日付・開始時刻・優先度を設定したタスクを完了する',ok:hasAllFields},
+  {id:'mission-multiple-unlocks',hidden:true,icon:'✨',title:'予想外の一枚',desc:'1回の達成で複数のミッションが同時に解除される',ok:hasMultipleMissionUnlocks}
+ ];
+ // 天気・端末状態・実作業時間など、外部情報や計測不能なものは除外。
+ const missions=[
+  {id:'mission-night',icon:'🌙',title:'夜更けの灯台',desc:'22:00〜翌4:59にタスクを完了する',ok:rewardHistory.some(x=>{if(!x.completedAt)return false;const h=new Date(x.completedAt).getHours();return h>=22||h<5;})},
+  {id:'mission-morning',icon:'🌅',title:'朝焼けの一歩',desc:'5:00〜8:59にタスクを完了する',ok:rewardHistory.some(x=>{if(!x.completedAt)return false;const h=new Date(x.completedAt).getHours();return h>=5&&h<9;})},
+  {id:'mission-lunch',icon:'🥪',title:'昼休みの冒険者',desc:'11:00〜13:59にタスクを完了する',ok:rewardHistory.some(x=>{if(!x.completedAt)return false;const h=new Date(x.completedAt).getHours();return h>=11&&h<14;})},
+  {id:'mission-afternoon',icon:'🔔',title:'午後三時の鐘',desc:'15:00〜15:59にタスクを完了する',ok:rewardHistory.some(x=>{if(!x.completedAt)return false;return new Date(x.completedAt).getHours()===15;})},
+  {id:'mission-weekend',icon:'🧺',title:'週末のひと仕事',desc:'土曜日または日曜日にタスクを完了する',ok:rewardHistory.some(x=>{if(!x.completedAt)return false;const d=new Date(x.completedAt).getDay();return d===0||d===6;})},
+  {id:'mission-day3',icon:'☀️',title:'晴れた日の集中',desc:'1日に3個以上のタスクを完了する',ok:maxDayCount>=3},
+  {id:'mission-day5',icon:'🌻',title:'実りの一日',desc:'1日に5個以上のタスクを完了する',ok:maxDayCount>=5},
+  {id:'mission-short',icon:'🐇',title:'短距離ランナー',desc:'所要時間15分以下のタスクを完了する',ok:completedMinutes.some(m=>m>0&&m<=15)},
+  {id:'mission-long',icon:'🐢',title:'じっくり取り組む',desc:'所要時間60分以上のタスクを完了する',ok:completedMinutes.some(m=>m>=60)},
+  {id:'mission-mountain',icon:'⛰️',title:'大きな山を越えて',desc:'所要時間120分以上のタスクを完了する',ok:completedMinutes.some(m=>m>=120)},
+  {id:'mission-study',icon:'📚',title:'学びのしるし',desc:'タイトルに「勉強」または「学習」を含むタスクを完了する',ok:titleText.some(t=>/勉強|学習/.test(t))},
+  {id:'mission-streak3',icon:'🔥',title:'三日続きの灯',desc:'3日連続でタスクを完了する',ok:longestStreak>=3},
+  {id:'mission-streak7',icon:'🌈',title:'一週間の虹',desc:'7日連続でタスクを完了する',ok:longestStreak>=7},
+  {id:'mission-streak14',hidden:true,icon:'⛵',title:'二週間の航海',desc:'14日連続でタスクを完了する',ok:longestStreak>=14},
+  {id:'mission-streak30',hidden:true,icon:'🌕',title:'ひと月の足音',desc:'30日連続でタスクを完了する',ok:longestStreak>=30},
+  {id:'mission-sameperiod',icon:'🕰️',title:'同じ時刻の約束',desc:'同じ時間帯（朝・昼・夕方・夜）に3日連続でタスクを完了する',ok:(()=>{
+   const groups={};rewardHistory.forEach(x=>{if(!x.completedAt)return;const d=new Date(x.completedAt),h=d.getHours(),period=h<11?'朝':h<16?'昼':h<20?'夕方':'夜',key=iso(d);groups[key]=period;});
+   const byDate=Object.keys(groups).sort();let run=1;for(let i=1;i<byDate.length;i++){const prev=new Date(byDate[i-1]+'T12:00:00'),cur=new Date(byDate[i]+'T12:00:00');if(groups[byDate[i]]===groups[byDate[i-1]]&&(cur-prev)===86400000)run++;else run=1;if(run>=3)return true;}return false;
+  })()},
+  {id:'mission-ontime',icon:'📮',title:'約束を守る人',desc:'期限が設定されたタスクを3件以上、すべて期限内に完了する',ok:dueItems.length>=3&&onTimeRate===1},
+  {id:'mission-improve',icon:'📈',title:'昨日を超えて',desc:'直近7日間の完了数が、その前の7日間を上回る（前期間に達成記録が必要）',ok:hasWeekImprovement},
+  {id:'mission-firstrow',icon:'🟦',title:'最初の一列',desc:'タスクを5個完了して、スタンプカードの最初の5マスを埋める',ok:total>=5},
+  {id:'mission-cardcomplete',icon:'🎴',title:'最後の一マス',desc:'タスクを10個完了して、スタンプカードを1枚完成させる',ok:total>=10},
+  {id:'mission-newpage',icon:'📖',title:'新しいページ',desc:'タスクを20個完了して、スタンプカードを2枚分埋める',ok:total>=20},
+  {id:'mission-cardtraveler',icon:'🧳',title:'カードの旅人',desc:'タスクを50個完了する',ok:total>=50},
+  {id:'mission-zoro',icon:'🪄',title:'ゾロ目の奇跡',desc:'時刻の「時」と「分」が同じ数字になるときにタスクを完了する（例：10:10）',ok:hasMatchingClock},
+  {id:'mission-mirror',icon:'🪞',title:'鏡合わせの時間',desc:'時刻の時と分が逆順になるときにタスクを完了する（例：12:21）',ok:rewardHistory.some(x=>{if(!x.completedAt)return false;const d=new Date(x.completedAt);return String(d.getHours()).padStart(2,'0').split('').reverse().join('')===String(d.getMinutes()).padStart(2,'0');})},
+  {id:'mission-stairs',icon:'🔢',title:'数字の階段',desc:'連続する数字の時刻にタスクを完了する（例：12:34）',ok:rewardHistory.some(x=>{if(!x.completedAt)return false;const d=new Date(x.completedAt);return /^(0123|1234|2345|3456|4567|5678|6789)$/.test(String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0'));})},
+  {id:'mission-five',icon:'🖐️',title:'五分の奇跡',desc:'分が00・05・10…55分のいずれかの時刻にタスクを完了する',ok:rewardHistory.some(x=>x.completedAt&&new Date(x.completedAt).getMinutes()%5===0)},
+  {id:'mission-deadline',icon:'📨',title:'滑り込みセーフ',desc:'期限日の23:00〜23:59にタスクを完了する（期限は日付単位）',ok:rewardHistory.some(x=>{if(!x.due||!x.completedAt)return false;const c=new Date(x.completedAt),due=new Date(x.due+'T23:59:59');return iso(c)===x.due&&c.getHours()===23&&due>=c;})},
+  {id:'mission-midnight',icon:'🌌',title:'日付の境界線',desc:'23:55〜翌0:05の間にタスクを完了する',ok:hasMidnightEdge},
+  {id:'mission-colors',icon:'🎨',title:'虹色の予定表',desc:'異なる色のタスクを3種類以上完了する',ok:colorsDone.size>=3},
+  {id:'mission-combination',icon:'🎯',title:'優先度の使い分け',desc:'高優先度と低優先度のタスクをそれぞれ完了する',ok:prioritiesDone.has('high')&&prioritiesDone.has('low')},
+  {id:'mission-rescue',icon:'🛟',title:'未配置の救出者',desc:'日付も開始時刻も設定されていないタスクを完了する',ok:rewardHistory.some(x=>!x.date&&!x.time)},
+  {id:'mission-tidy',icon:'🧹',title:'計画の整理人',desc:'日付または開始時刻が設定されたタスクを完了する',ok:rewardHistory.some(x=>!!(x.date||x.time))},
+  {id:'mission-return',icon:'🌱',title:'久しぶりの一歩',desc:'7日以上タスク達成が空いたあと、再びタスクを完了する',ok:hasReturnAfterGap},
+  {id:'mission-ontime-start',icon:'⏰',title:'時刻どおりの一歩',desc:'予定開始時刻の前後30分以内にタスクを完了する',ok:hasScheduledWindow},
+  {id:'mission-hidden-time',icon:'🕵️',title:hasElevenEleven?'時の目撃者':'？？？',desc:hasElevenEleven?'11:11にタスクを完了する':'ヒント：時計の数字に注目してみよう',ok:hasElevenEleven,hidden:true}
+ ];
+ missions.push(...missionExtras,...moreMissions);
+ const multipleUnlockMission=missions.find(m=>m.id==='mission-multiple-unlocks');if(multipleUnlockMission)multipleUnlockMission.ok=missions.filter(m=>m.ok).length>=2;
+ const missionCategory=(m)=>{
+  const id=m.id||'';
+  if(/streak|day|week|month|return|restart|quiet|rhythm|days|weekday|weekend|bridge|same-day|mixed-week|many-days|long-streak/.test(id))return '継続・リズム';
+  if(/plan|move|time-change|priority-change|recolor|duration-change|edit|rebuild|date-rescue|date-release|priority-up|priority-down|color-explorer|duration-up|duration-down|creator|editor|cleanup|recovery|due-date-edit|lookahead|future-letter|three-signs|first-plan/.test(id))return '計画・編集';
+  if(/due|deadline|no-deadline|on-time|ontime|time|clock|hour|midnight|zoro|mirror|stairs|five|night|morning|afternoon|lunch/.test(id))return '時間・締切';
+  if(/operation/.test(id))return 'オペレーション';
+  if(/color|priority|title|length|short|long|task|toolbox|keys|combination|mixed|variety|small-large|deep-work|ten-day|hundred|firstrow|card|page|stamp|row|exactly|multiple-unlocks/.test(id))return 'タスク・達成';
+  return '発見・コレクション';
+};
+const missionDifficulty=(m)=>{
+  if(/hidden|streak30|more-than-100|hundred|many-days|ten-day|seven-colors|long-streak|month-three/.test(m.id||''))return '★★★';
+  if(/streak7|streak14|streak3|five-days|week-rhythm|creator|editor|cleanup|same-day|bridge|all-priorities|three-signs|many-titles|same-title/.test(m.id||''))return '★★';
+  return '★';
+};
+missions.forEach(m=>{if(m.ok&&!unlockedMissions.includes(m.id))unlockedMissions.push(m.id);m.unlocked=unlockedMissions.includes(m.id);m.group=missionCategory(m);m.difficulty=missionDifficulty(m);});saveMissionUnlocks();
+ stickerList.push(...missions.map(m=>({...m,ok:undefined,unlocked:!!m.unlocked,image:null,category:'ミッション'})));
+ const stickerSwitch=document.querySelectorAll('[data-sticker-view]');
+ if(!window.__taskflowStickerSwitchBound){
+  stickerSwitch.forEach(button=>{
+   button.setAttribute('role','tab');
+   button.addEventListener('click',()=>{
+    const view=button.dataset.stickerView;
+    document.querySelectorAll('[data-sticker-view]').forEach(b=>{
+     const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;
+    });
+    const milestoneSection=document.getElementById('sticker-section-milestones');
+    const missionSection=document.getElementById('sticker-section-missions');
+    milestoneSection.hidden=view!=='milestones';missionSection.hidden=view!=='missions';
+    milestoneSection.classList.toggle('active',view==='milestones');missionSection.classList.toggle('active',view==='missions');
+   });
+  });
+  window.__taskflowStickerSwitchBound=true;
+ }
+ const stickerRoots={
+  '節目のバッジ':document.getElementById('achievement-stickers-milestones'),
+  'ミッション':document.getElementById('achievement-stickers-missions')
+ };
+ Object.values(stickerRoots).forEach(root=>{if(root)root.innerHTML='';});
+ stickerList.forEach(s=>{
+  const stickerRoot=stickerRoots[s.category]||stickerRoots['ミッション'];
+  if(!stickerRoot)return;
+  const item=document.createElement('div');item.className='sticker-item'+(s.unlocked?' unlocked':'');
+  item.tabIndex=0;item.setAttribute('role','button');item.setAttribute('aria-label',`${s.title}。${s.category}。${s.unlocked?'獲得済み':s.desc}`);
+  const art=document.createElement('div');art.className='sticker-art'+(s.unlocked?'':' sticker-silhouette');
+  if(s.image){
+   const image=document.createElement('img');image.src=s.image;image.alt='';image.loading='lazy';image.draggable=false;
+   image.className='sticker-image'+(s.unlocked?'':' locked-image');art.append(image);
+  }else{
+   art.textContent=s.icon;
+  }
+  const bubble=document.createElement('div');bubble.className='sticker-tooltip';
+  const title=document.createElement('strong');title.textContent=s.hidden&&!s.unlocked?'？？？':s.title;
+  const category=document.createElement('small');category.textContent=s.category==='ミッション'&&s.group?`${s.group} · 難易度 ${s.difficulty||'★'}`:s.category;
+  const condition=document.createElement('small');condition.textContent=`${s.hidden&&!s.unlocked?'ヒント：':s.unavailable?'状態：':'収集条件：'}${s.desc}`;
+  const status=document.createElement('small');status.textContent=s.unlocked?'獲得済み':s.unavailable?'この環境では未対応':'未獲得';
+  bubble.append(title,category,condition,status);
+  item.append(art,bubble);stickerRoot.append(item);
+  item.addEventListener('click',()=>{const wasSelected=item.classList.contains('selected');document.querySelectorAll('.sticker-item.selected').forEach(el=>el.classList.remove('selected'));if(!wasSelected)item.classList.add('selected');});
+  item.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();item.click();}if(e.key==='Escape')item.classList.remove('selected');});
+ });
+ const history=document.getElementById('achievement-history');history.innerHTML='';
+ if(!total){const empty=document.createElement('div');empty.className='achievement-empty';empty.textContent='まだ達成記録はありません。最初のタスクを完了したら、ここに記録されます。';history.append(empty);return}
+ rewardHistory.forEach(item=>{const row=document.createElement('div');row.className='achievement-history-item';const stamp=document.createElement('div');stamp.className='achievement-history-stamp';stamp.textContent='★';const main=document.createElement('div');main.className='achievement-history-main';const title=document.createElement('strong');title.textContent=item.title||'完了したタスク';const date=document.createElement('small');const dt=item.completedAt?new Date(item.completedAt):null;date.textContent=`${dt&&!Number.isNaN(dt.getTime())?`${dt.getFullYear()}/${pad(dt.getMonth()+1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`:'日時不明'} · ${Number(item.minutes)||0}分`;main.append(title,date);row.append(stamp,main);history.append(row)})
+}
+function renderStats(){document.getElementById('stat-total').textContent=tasks.length;document.getElementById('stat-done').textContent=rewardHistory.length+tasks.filter(t=>t.done).length;document.getElementById('stat-unscheduled').textContent=tasks.filter(t=>!t.date&&!t.done).length}
+function render(){renderTasks();renderCalendar();renderAchievements();renderOperations();setTodoTab(todoTab);setView(view)}
+function shiftWeek(n){
+ const mode=document.getElementById('view-mode').value;
+ if(mode==='month'){
+   weekStart=new Date(weekStart.getFullYear(),weekStart.getMonth()+n,1,12);
+ }else if(mode==='day'){
+   weekStart=addDays(weekStart,n);
+ }else{
+   // Week view moves through consecutive 7-day windows, anchored to the chosen start date.
+   weekStart=addDays(weekStart,n*7);
+ }
+ renderCalendar()
+}
+function goToday(){weekStart=parse(iso(new Date()));renderCalendar()}
+function openPlacementAt(date,time){if(pendingCalendarTaskId){const id=pendingCalendarTaskId;pendingCalendarTaskId=null;const hint=document.getElementById('calendar-placement-hint');if(hint){hint.textContent='';hint.classList.remove('show')}placeTask(id,date,time);return}let unscheduled=tasks.find(t=>!t.date&&!t.done);if(unscheduled){placeTask(unscheduled.id,date,time);return}let title=prompt('配置するタスク名を入力してください（既存タスクは To Do の「配置」から選べます）');if(!title)return;const createdTask={id:uid(),title,minutes:30,priority:'medium',due:null,date,time,notes:'',color:'#3869c8',done:false,created:Date.now()};tasks.unshift(createdTask);trackEvent('task_created',{task:{...createdTask},source:'calendar'});save();render();toast('カレンダーにタスクを作成しました')}
+function placeTask(id,date,time){let t=tasks.find(x=>x.id===id);if(!t)return;const before={...t};t.date=date;t.time=time;if(before.date!==t.date)trackEvent('task_date_changed',{taskId:id,from:before.date||null,to:t.date||null});if(before.time!==t.time)trackEvent('task_time_changed',{taskId:id,from:before.time||null,to:t.time||null});trackEvent('task_placed',{taskId:id,from:{date:before.date||null,time:before.time||null},to:{date:t.date,time:t.time}});save();render();toast(`${t.title} を ${fmt(parse(date))} ${time} に配置しました`)}
+function openModal(id,placeMode){let t=tasks.find(x=>x.id===id);if(!t)return;document.getElementById('edit-id').value=id;document.getElementById('edit-title').value=t.title;document.getElementById('edit-minutes').value=t.minutes||30;document.getElementById('edit-priority').value=t.priority||'medium';document.getElementById('edit-due').value=t.due||'';document.getElementById('edit-date').value=t.date||'';document.getElementById('edit-notes').value=t.notes||'';document.getElementById('edit-color').value=t.color||'#3869c8';let sel=document.getElementById('edit-time');sel.innerHTML='';for(let h=0;h<=23;h++)for(let m of [0,15,30,45]){let v=`${pad(h)}:${pad(m)}`,o=document.createElement('option');o.value=v;o.textContent=v;sel.append(o)}sel.value=t.time||'16:00';document.getElementById('modal-title').textContent=placeMode?'タスクをカレンダーに配置':'タスクを編集';document.getElementById('modalback').classList.add('show');if(placeMode&&!t.date)document.getElementById('edit-date').value=iso(new Date())}
+function closeModal(){document.getElementById('modalback').classList.remove('show')}
+function saveEdit(){let id=document.getElementById('edit-id').value,t=tasks.find(x=>x.id===id),title=document.getElementById('edit-title').value.trim();if(!title){toast('タスク名を入力してください');return}const before={...t};t.title=title;t.minutes=Math.max(5,Number(document.getElementById('edit-minutes').value)||30);t.priority=document.getElementById('edit-priority').value;t.due=document.getElementById('edit-due').value||null;t.date=document.getElementById('edit-date').value||null;t.time=t.date?document.getElementById('edit-time').value:null;t.notes=document.getElementById('edit-notes').value;t.color=document.getElementById('edit-color').value||'#3869c8';t.updated=Date.now();const changedFields=['title','minutes','priority','due','date','time','color'].filter(k=>(before[k]??null)!==(t[k]??null));if(changedFields.length)trackEvent('task_edited',{taskId:id,before,after:{...t},changedFields});if(before.date!==t.date)trackEvent('task_date_changed',{taskId:id,from:before.date||null,to:t.date||null});if(before.time!==t.time)trackEvent('task_time_changed',{taskId:id,from:before.time||null,to:t.time||null});if(before.priority!==t.priority)trackEvent('task_priority_changed',{taskId:id,from:before.priority||'medium',to:t.priority||'medium'});if(before.color!==t.color)trackEvent('task_color_changed',{taskId:id,from:before.color||null,to:t.color||null});if(before.minutes!==t.minutes)trackEvent('task_duration_changed',{taskId:id,from:before.minutes||30,to:t.minutes||30});save();closeModal();render();toast('変更を保存しました')}
+function deleteTask(){let id=document.getElementById('edit-id').value;let target=tasks.find(t=>t.id===id);if(!target)return;const wasLastActive=tasks.filter(x=>!x.done).length===1&&!target.done;trackEvent('task_deleted',{task:{...target},lastTask:wasLastActive});tasks=tasks.filter(t=>t.id!==id);if(!tasks.some(x=>!x.done))trackEvent('zero_open_tasks');save();closeModal();render();toast('「'+target.title+'」を削除しました')}
+function enableNotifications(){
+ const status=document.getElementById('notification-status');
+ if(!('Notification' in window)){status.textContent='このブラウザは通知に対応していません';toast('このブラウザでは通知を利用できません');return}
+ if(Notification.permission==='granted'){status.textContent='ブラウザ通知は許可済みです';toast('通知は許可済みです');return}
+ if(Notification.permission==='denied'){status.textContent='ブラウザ設定で通知を許可してください';toast('ブラウザのサイト設定から通知を許可してください');return}
+ Notification.requestPermission().then(permission=>{status.textContent=permission==='granted'?'ブラウザ通知は許可済みです':'通知は許可されませんでした';toast(permission==='granted'?'通知が許可されました':'通知は許可されませんでした')}).catch(()=>{status.textContent='通知の許可を取得できませんでした';toast('通知の許可を取得できませんでした')})
+}
+document.getElementById('modalback').addEventListener('click',e=>{if(e.target.id==='modalback')closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();if(e.key==='Enter'&&document.activeElement.id==='new-title')addTask()});
+window.addEventListener('resize',()=>setView(view));
+try{load();render();setView('todo');if('Notification' in window&&Notification.permission==='granted')document.getElementById('notification-status').textContent='ブラウザ通知は許可済みです'}catch(err){console.error('TaskFlow startup error:',err);document.getElementById('startup-error').style.display='block';}
+
+function initializeMobileAddSheet(){
+ applyResponsivePanelOrder();
+ moveMobileAddForms();
+ const taskSave=document.querySelector('#mobile-add-sheet #quick-add button[onclick="addTask()"]');
+ const opSave=document.querySelector('#mobile-add-sheet #operation-form .operation-actions button[onclick="saveOperation()"]');
+ if(taskSave&&!taskSave.dataset.mobileSheetBound){taskSave.dataset.mobileSheetBound='1';taskSave.addEventListener('click',()=>{setTimeout(closeMobileAddSheet,120);});}
+ if(opSave&&!opSave.dataset.mobileSheetBound){opSave.dataset.mobileSheetBound='1';opSave.addEventListener('click',()=>{if(document.getElementById('operation-name')?.value.trim()&&document.getElementById('operation-deadline')?.value)setTimeout(closeMobileAddSheet,100);});}
+ const backdrop=document.getElementById('mobile-add-backdrop');
+ if(backdrop&&!backdrop.dataset.mobileSheetBound){backdrop.dataset.mobileSheetBound='1';backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeMobileAddSheet();});}
+ const taskListBackdrop=document.getElementById('mobile-tasklist-backdrop');
+ if(taskListBackdrop&&!taskListBackdrop.dataset.bound){taskListBackdrop.dataset.bound='1';taskListBackdrop.addEventListener('click',e=>{if(e.target===taskListBackdrop)closeTaskListSheet();});}
+ if(!window.__taskflowMobileSheetKeysBound){document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMobileAddSheet();closeTaskListSheet();}});window.__taskflowMobileSheetKeysBound=true;}
+ if(!window.__taskflowMobileSheetResizeBound){window.addEventListener('resize',()=>{const wasMobile=window.__taskflowWasMobile;const nowMobile=isMobileTaskFlow();applyResponsivePanelOrder();if(wasMobile!==nowMobile)moveMobileAddForms();window.__taskflowWasMobile=nowMobile;});window.__taskflowMobileSheetResizeBound=true;}
+ window.__taskflowWasMobile=isMobileTaskFlow();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initializeMobileAddSheet,{once:true});
+else initializeMobileAddSheet();
+
+</script>
+
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('TaskFlow offline support could not be enabled:', err));
+  });
+}
+</script>
+
+</body>
+</html>
